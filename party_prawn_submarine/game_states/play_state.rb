@@ -9,6 +9,9 @@ class PlayState
 
 	BACKGROUND_Z = 0
 
+	# Handles button events in the PlayState.
+	attr_accessor :controller
+
 	attr_accessor :width, :height
 
 	# Initialises a new PlayState.
@@ -23,6 +26,22 @@ class PlayState
 	#   - +Gosu::Window+ +window+ -> The window to draw the graphical assets in
 	def self.preload(window)
 		@@img = Gosu::Image.new(window, BACKGROUND_IMAGE_PATH, false)
+	end
+
+	# Tells the #controller that the button with the given id was pressed.
+	#
+	# * *Args*    :
+	#   - +Fixnum+ +id+ -> The ID of the button being pressed
+	def button_down(id)
+		@controller.button_down(id) if @controller
+	end
+
+	# Tells the #controller that the button with the given id was released.
+	#
+	# * *Args*    :
+	#   - +Fixnum+ +id+ -> The ID of the button that was released
+	def button_up(id)
+		@controller.button_up(id) if @controller
 	end
 
 	# Updates the PlayState and all entities it contains.

@@ -55,6 +55,9 @@ class Controller
 
 	# Calls the Proc when the button associated with the given button ID is 
 	# pressed.
+	#
+	# * *Args*    :
+	#   - +Fixnum+ +id+ -> The ID of the button being pressed down
 	def button_down(id)
 		callback = @bt_down[id]
 		callback.call if callback
@@ -62,6 +65,9 @@ class Controller
 
 	# Calls the Proc when the button associated with the given button ID is 
 	# released.
+	#
+	# * *Args*    :
+	#   - +Fixnum+ +id+ -> The ID of the button being released
 	def button_up(id)
 		callback = @bt_up[id]
 		callback.call if callback

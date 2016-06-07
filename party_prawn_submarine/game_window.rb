@@ -9,6 +9,14 @@ class GameWindow < Gosu::Window
 		self.caption = 'Party Prawn Submarine'
 	end
 
+	def button_down(id)
+		@state.button_down(id)
+	end
+
+	def button_up(id)
+		@state.button_up(id)
+	end
+
 	def update
 		@state.update
 	end
@@ -19,6 +27,9 @@ class GameWindow < Gosu::Window
 
 	def draw
 		@state.draw
+		if @ent
+			@ent.draw(100, 100, 50)
+		end
 	end
 
 end

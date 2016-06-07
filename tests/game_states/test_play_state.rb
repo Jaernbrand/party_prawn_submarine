@@ -208,6 +208,28 @@ class PlayStateTester < Test::Unit::TestCase
 		PlayState::img.verify
 	end
 
+	def test_button_down
+		id = 50
+
+		@play_state.controller = MiniTest::Mock.new
+		@play_state.controller.expect(:button_down, nil, [id])
+
+		@play_state.button_down(id)
+
+		@play_state.controller.verify
+	end
+
+	def test_buttoon_up
+		id = 50
+
+		@play_state.controller = MiniTest::Mock.new
+		@play_state.controller.expect(:button_up, nil, [id])
+
+		@play_state.button_up(id)
+
+		@play_state.controller.verify
+	end
+
 
 private
 

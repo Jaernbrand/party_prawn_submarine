@@ -7,6 +7,8 @@ require_relative 'entities/submarine'
 require_relative 'entities/prawn'
 require_relative 'entities/party_horn'
 
+require_relative 'controller'
+
 class GameFactory
 
 	def create_game(*players)
@@ -20,6 +22,9 @@ class GameFactory
 			sub.player = curr_player
 			play_state.add_entity(sub)
 		end
+
+		# TODO Add callbacks to the controller.
+		play_state.controller = Controller.new
 
 		# TODO Set these somewhare else!
 		play_state.width = 1024
