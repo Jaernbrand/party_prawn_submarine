@@ -227,6 +227,11 @@ class Submarine
 
 		end
 	end
+	
+	# Fires a new Torpedo if possible.
+	def try_fire_torpedo
+		fire_torpedo if torpedo_ready?
+	end
 
 	# Returns whether the Submarine is ready to fire a new Torpedo.
 	#

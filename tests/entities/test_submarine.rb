@@ -635,6 +635,33 @@ class SubmarineTester < Test::Unit::TestCase
 		@sub.prawn.verify
 	end
 
+	def test_try_fire_torpedo
+		fake_tile = MiniTest::Mock.new
+		fake_tile.expect(:width, 198, [])
+		fake_tile.expect(:height, 135, [])
+
+		Submarine::tiles = MiniTest::Mock.new
+		Submarine::tiles.expect(:[], fake_tile, [0])
+
+		play_state = MiniTest::Mock.new
+		play_state.expect(:add_entity, nil, [Torpedo])
+
+		@sub.game_state = play_state
+		@sub.player = MiniTest::Mock.new
+
+		@sub.try_fire_torpedo
+
+		play_state.verify
+	end
+
+	def test_try_fire_torpedo_not_reloaded
+		launched = Time.now + Submarine::STD_TORPEDO_RELOAD_TIME / 2
+
+		@sub.torpedo_launched = launched
+		@sub.try_fire_torpedo
+		assert_equal(launched, @sub.torpedo_launched)
+	end
+
 private
 
 	def setup_accessor_stub(mock, attribute)
