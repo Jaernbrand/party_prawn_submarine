@@ -91,30 +91,6 @@ class Submarine
 
 	# Updates the Submarine and its Prawn.
 	def update
-		if Gosu::button_down?(@player.get_button(:left))
-			move_left
-		end
-		if Gosu::button_down?(@player.get_button(:right)) 
-			move_right
-		end
-		if Gosu::button_down?(@player.get_button(:up))
-			move_up
-		end
-		if Gosu::button_down?(@player.get_button(:down))
-			move_down
-		end
-
-		if !Gosu::button_down?(@player.get_button(:down)) &&
-			!Gosu::button_down?(@player.get_button(:up)) &&
-			!is_plane
-
-			stabilise
-		end
-
-		if Gosu::button_down?(@player.get_button(:torpedo)) && torpedo_ready?
-			fire_torpedo
-		end
-
 		if @player_moved
 			@prawn.swimming = true
 		else

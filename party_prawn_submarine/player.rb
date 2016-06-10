@@ -3,7 +3,7 @@ class Player
 
 	attr_accessor :name, :colour
 
-	attr_writer :controls
+	attr_accessor :controls
 
 	def initialize(controls)
 		@controls = controls

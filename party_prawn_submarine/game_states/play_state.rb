@@ -46,6 +46,7 @@ class PlayState
 
 	# Updates the PlayState and all entities it contains.
 	def update
+		@controller.buttons_pressed_down
 		@all_entities.each do |entity|
 			entity.update
 		end
