@@ -209,6 +209,8 @@ class Submarine
 		fire_torpedo if torpedo_ready?
 	end
 
+protected
+
 	# Returns whether the Submarine is ready to fire a new Torpedo.
 	#
 	# * *Returns* :
@@ -231,6 +233,8 @@ class Submarine
 		@game_state.add_entity(torpedo)
 		@torpedo_launched = Time.new
 	end
+
+public
 
 	# Return whether the Submarine needs to be redrawn in the GameWindow.
 	#

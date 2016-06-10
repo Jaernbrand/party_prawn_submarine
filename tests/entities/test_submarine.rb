@@ -386,12 +386,12 @@ class SubmarineTester < Test::Unit::TestCase
 	end
 
 	def test_torpedo_ready
-		assert(@sub.torpedo_ready?)
+		assert(@sub.send(:torpedo_ready?))
 	end
 
 	def test_torpedo_ready_not_ready
 		@sub.torpedo_launched = Time.now + Submarine::STD_TORPEDO_RELOAD_TIME / 2
-		assert(!@sub.torpedo_ready?)
+		assert(!@sub.send(:torpedo_ready?))
 	end
 
 	def test_fire_torpedo
@@ -409,7 +409,7 @@ class SubmarineTester < Test::Unit::TestCase
 		@sub.player = MiniTest::Mock.new
 
 		before = Time.now
-		@sub.fire_torpedo
+		@sub.send(:fire_torpedo)
 		after = Time.now
 
 		fake_tile.verify
