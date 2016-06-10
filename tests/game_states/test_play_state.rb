@@ -104,6 +104,9 @@ class PlayStateTester < Test::Unit::TestCase
 	end
 
 	def test_update_one_entity
+		@play_state.controller = MiniTest::Mock.new
+		@play_state.controller.expect(:buttons_pressed_down, nil, [])
+
 		entity = MiniTest::Mock.new
 		entity.expect(:update, nil, [])
 		entity.expect(:game_state=, nil, [@play_state])
@@ -115,6 +118,9 @@ class PlayStateTester < Test::Unit::TestCase
 	end
 
 	def test_update_multiple_entities
+		@play_state.controller = MiniTest::Mock.new
+		@play_state.controller.expect(:buttons_pressed_down, nil, [])
+
 		entities = []
 
 		num = 4
@@ -130,6 +136,15 @@ class PlayStateTester < Test::Unit::TestCase
 		entities.each do |ent|
 			ent.verify
 		end
+	end
+
+	def test_update_controller_called
+		@play_state.controller = MiniTest::Mock.new
+		@play_state.controller.expect(:buttons_pressed_down, nil, [])
+
+		@play_state.update
+
+		@play_state.controller.verify
 	end
 
 	def test_death_mark
