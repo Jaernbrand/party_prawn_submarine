@@ -687,9 +687,10 @@ class SubmarineTester < Test::Unit::TestCase
 
 		@sub.prawn.verify
 		assert(!@sub.player_moved)
+		assert(!@sub.moved_y_axis)
 	end
 
-	def test_update_player_not_moved_sub_is_not_plane
+	def test_update_player_not_moved_drift_x_axis_sub_is_not_plane
 		start_x = 0
 		start_angle = 90
 		@sub.player_moved = false
@@ -706,6 +707,46 @@ class SubmarineTester < Test::Unit::TestCase
 		assert_not_equal(start_angle, @sub.angle)
 		@sub.prawn.verify
 		assert(!@sub.player_moved)
+		assert(!@sub.moved_y_axis)
+	end
+
+	def test_update_player_not_moved_y_axis_sub_is_not_plane
+		start_y = 0
+		start_angle = 90
+		@sub.player_moved = false
+
+		setup_drift_y_mock
+		setup_stabilise_mock(start_angle)
+
+		@sub.prawn.expect(:swimming=, false, [false])
+		@sub.prawn.expect(:update, nil, [])
+
+		@sub.update
+
+		assert_not_equal(start_y, @sub.y)
+		assert_not_equal(start_angle, @sub.angle)
+		@sub.prawn.verify
+		assert(!@sub.player_moved)
+		assert(!@sub.moved_y_axis)
+	end
+
+	def test_update_player_moved_y_axis_sub_is_not_plane
+		start_y = 0
+		start_angle = 90
+		@sub.player_moved = true
+		@sub.moved_y_axis = true
+
+		@sub.angle = start_angle
+
+		@sub.prawn.expect(:swimming=, true, [true])
+		@sub.prawn.expect(:update, nil, [])
+
+		@sub.update
+
+		assert_equal(start_angle, @sub.angle)
+		@sub.prawn.verify
+		assert(!@sub.player_moved)
+		assert(!@sub.moved_y_axis)
 	end
 
 private
@@ -713,6 +754,11 @@ private
 	def setup_drift_x_mock
 		@sub.x_speed = Submarine::STD_MAX_SPEED
 		setup_accessor_stub(@sub.prawn, "x")
+	end
+
+	def setup_drift_y_mock
+		@sub.y_speed = Submarine::STD_MAX_SPEED
+		setup_accessor_stub(@sub.prawn, "y")
 	end
 
 	def setup_stabilise_mock(angle)

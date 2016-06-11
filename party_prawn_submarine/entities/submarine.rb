@@ -64,6 +64,7 @@ class Submarine
 		@max_speed = STD_MAX_SPEED
 
 		@has_moved = true
+		@moved_y_axis = false
 
 		@prawn = prawn
 		@prawn.x = x
@@ -95,12 +96,15 @@ class Submarine
 			@prawn.swimming = true
 		else
 			drift 
-			stabilise if !is_plane
 			@prawn.swimming = false
 		end
 
+		if !@moved_y_axis && !is_plane
+			stabilise
+		end
+
 		@prawn.update
-		@player_moved = false
+		@player_moved = @moved_y_axis = false
 	end
 
 	# Moves the Submarine instance in the direction its heading and decreases 
@@ -160,7 +164,7 @@ class Submarine
 		update_y(@y_speed)
 		update_angle(calculate_angle(-@rotation_speed))
 
-		@has_moved = @player_moved = true
+		@has_moved = @player_moved = @moved_y_axis = true
 	end
 
 	# Moves the Submarine downwards.
@@ -173,7 +177,7 @@ class Submarine
 		update_y(@y_speed)
 		update_angle(calculate_angle(@rotation_speed))
 
-		@has_moved = @player_moved = true
+		@has_moved = @player_moved = @moved_y_axis = true
 	end
 
 	# Returns whether the Submarine instance is plane or not.
