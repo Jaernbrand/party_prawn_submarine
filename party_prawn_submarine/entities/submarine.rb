@@ -95,6 +95,7 @@ class Submarine
 			@prawn.swimming = true
 		else
 			drift 
+			stabilise if !is_plane
 			@prawn.swimming = false
 		end
 
@@ -108,13 +109,13 @@ class Submarine
 		if @x_speed != 0
 			@x_speed = adjust_towards_zero(@x_speed, @speed_inc_step) 		
 			update_x(@x_speed)
+			@has_moved = true
 		end
 		if @y_speed != 0
 			@y_speed = adjust_towards_zero(@y_speed, @speed_inc_step) 
 			update_y(@y_speed)
+			@has_moved = true
 		end
-
-		@has_moved = true
 	end
 
 	# Moves the Submarine to the left.
@@ -204,6 +205,28 @@ class Submarine
 		end
 	end
 	
+	# Return whether the Submarine needs to be redrawn in the GameWindow.
+	#
+	# * *Returns* :
+	#   - +true+ if the Submarine needs to be redrawn
+	# * *Return* *Type* :
+	#   - boolean
+	def needs_redraw?
+		if @has_moved || @prawn.needs_redraw?
+			return true
+		end
+		false
+	end
+
+	# Draws the Submarine in the GameWindow.
+	def draw
+		sub_face_left = face_left?
+
+		draw_sub(sub_face_left)
+		@has_moved = false
+		@prawn.draw
+	end
+
 	# Fires a new Torpedo if possible.
 	def try_fire_torpedo
 		fire_torpedo if torpedo_ready?
@@ -233,31 +256,6 @@ protected
 		@game_state.add_entity(torpedo)
 		@torpedo_launched = Time.new
 	end
-
-public
-
-	# Return whether the Submarine needs to be redrawn in the GameWindow.
-	#
-	# * *Returns* :
-	#   - +true+ if the Submarine needs to be redrawn
-	# * *Return* *Type* :
-	#   - boolean
-	def needs_redraw?
-		if @has_moved || @prawn.needs_redraw?
-			return true
-		end
-		false
-	end
-
-	# Draws the Submarine in the GameWindow.
-	def draw
-		sub_face_left = face_left?
-
-		draw_sub(sub_face_left)
-		@has_moved = false
-		@prawn.draw
-	end
-
 
 protected
 	

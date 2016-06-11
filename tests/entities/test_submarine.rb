@@ -662,7 +662,63 @@ class SubmarineTester < Test::Unit::TestCase
 		assert_equal(launched, @sub.torpedo_launched)
 	end
 
+	def test_update_player_moved
+		@sub.player_moved = true
+		
+		@sub.prawn.expect(:swimming=, true, [true])
+		@sub.prawn.expect(:update, nil, [])
+
+		@sub.update
+
+		@sub.prawn.verify
+		assert(!@sub.player_moved)
+	end
+
+	def test_update_player_not_moved_sub_is_plane
+		start_x = 0
+		@sub.player_moved = false
+
+		setup_drift_x_mock
+
+		@sub.prawn.expect(:swimming=, false, [false])
+		@sub.prawn.expect(:update, nil, [])
+
+		@sub.update
+
+		@sub.prawn.verify
+		assert(!@sub.player_moved)
+	end
+
+	def test_update_player_not_moved_sub_is_not_plane
+		start_x = 0
+		start_angle = 90
+		@sub.player_moved = false
+
+		setup_drift_x_mock
+		setup_stabilise_mock(start_angle)
+
+		@sub.prawn.expect(:swimming=, false, [false])
+		@sub.prawn.expect(:update, nil, [])
+
+		@sub.update
+
+		assert_not_equal(start_x, @sub.x)
+		assert_not_equal(start_angle, @sub.angle)
+		@sub.prawn.verify
+		assert(!@sub.player_moved)
+	end
+
 private
+	
+	def setup_drift_x_mock
+		@sub.x_speed = Submarine::STD_MAX_SPEED
+		setup_accessor_stub(@sub.prawn, "x")
+	end
+
+	def setup_stabilise_mock(angle)
+		@sub.angle = angle
+		@sub.prawn.expect(:angle=, nil, [Numeric])
+	end
 
 	def setup_accessor_stub(mock, attribute)
 		mock.expect(attribute.to_sym, 0, [])
