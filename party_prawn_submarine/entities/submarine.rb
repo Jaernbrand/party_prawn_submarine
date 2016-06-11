@@ -66,10 +66,7 @@ class Submarine
 		@has_moved = true
 		@moved_y_axis = false
 
-		@prawn = prawn
-		@prawn.x = x
-		@prawn.y = y
-		@prawn.angle = angle
+		set_prawn(prawn)
 	end
 
 
@@ -253,7 +250,7 @@ protected
 	# Submarine. 
 	def fire_torpedo
 		x = (@x + @@tiles[0].width/2) - Torpedo::IMG_WIDTH / 2
-		y = (@y + @@tiles[0].height/2) - Torpedo::IMG_HEIGHT / 2
+		y = (@y + @@tiles[0].height/2) - Torpedo::IMG_HEIGHT
 
 		torpedo = Torpedo.new(x, y, @angle)
 		torpedo.player = @player
@@ -261,8 +258,6 @@ protected
 		@torpedo_launched = Time.new
 	end
 
-protected
-	
 	# Updates the x value of the Submarine and its children by the given amount.
 	#
 	# * *Args*    :
@@ -369,6 +364,19 @@ protected
 
 
 private
+
+	# Sets the given prawn for the submarine. The attributes of the prawn are
+	# adjusted based on those of the submarine.
+	#
+	# * *Args*    :
+	#   - +Prawn+ +prawn+ -> The new Prawn of the Submarine
+	def set_prawn(prawn)
+		@prawn = prawn
+		prawn_x_adjust = Prawn::TILE_WIDTH/2 + Prawn::TILE_WIDTH/4
+		@prawn.x = (@x + SUB_TILE_WIDTH/2) - prawn_x_adjust
+		@prawn.y = (@y + SUB_TILE_HEIGHT/2) - Prawn::TILE_HEIGHT
+		@prawn.angle = @angle
+	end
 
 	# Draws the graphical representation of the Submarine in the GameWindow.
 	#

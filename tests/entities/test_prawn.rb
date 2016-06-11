@@ -200,4 +200,54 @@ class PrawnTester < Test::Unit::TestCase
 		assert_equal(oracle, @prawn.tile_idx)
 	end
 
+	def test_face_left_angle_0
+		oracle = false
+		@prawn.angle = 0
+		assert_equal(oracle, @prawn.send(:face_left?))
+	end
+
+	def test_face_left_angle_90
+		oracle = false
+		@prawn.angle = 90
+		assert_equal(oracle, @prawn.send(:face_left?))
+	end
+
+	def test_face_left_angle_91
+		oracle = true
+		@prawn.angle = 91
+		assert_equal(oracle, @prawn.send(:face_left?))
+	end
+
+	def test_face_left_angle_180
+		oracle = true
+		@prawn.angle = 180
+		assert_equal(oracle, @prawn.send(:face_left?))
+	end
+
+	def test_face_left_angle_269
+		oracle = true
+		@prawn.angle = 269
+		assert_equal(oracle, @prawn.send(:face_left?))
+	end
+
+	def test_face_left_angle_270
+		oracle = false
+		@prawn.angle = 270
+		assert_equal(oracle, @prawn.send(:face_left?))
+	end
+
+	def test_draw_angle_face_left
+		oracle = -20
+		@prawn.angle = 200
+		face_left = true
+		assert_equal(oracle, @prawn.send(:draw_angle, face_left))
+	end
+
+	def test_draw_angle_face_right
+		oracle = 10
+		@prawn.angle = 10
+		face_left = false
+		assert_equal(oracle, @prawn.send(:draw_angle, face_left))
+	end
+
 end

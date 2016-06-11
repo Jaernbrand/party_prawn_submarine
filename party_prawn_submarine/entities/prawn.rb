@@ -18,7 +18,7 @@ class Prawn
 	PRAWN_Z = 4
 
 	# In milli seconds
-	STD_ANIMATION_UPDATE_INTERVAL = 1000
+	STD_ANIMATION_UPDATE_INTERVAL = 100
 
 	# The Player that owns the Prawn.
 	attr_accessor :player
@@ -97,14 +97,15 @@ class Prawn
 
 	# Draws the Prawn in the GameWindow.
 	def draw
+		angle = draw_angle(face_left?)
 		prawn_img = @@tiles[@tile_idx]
-		prawn_img.draw_rot(@x, @y, PRAWN_Z, @angle)
+		prawn_img.draw_rot(@x, @y, PRAWN_Z, angle)
 
 		prawn_skin = @@skins[@tile_idx] 
 		prawn_skin.draw_rot(@x, 
 						 @y, 
 						 PRAWN_Z, 
-						 @angle, 
+						 angle, 
 						 0.5, # Default center_x 
 						 0.5, # Default center_y
 						 1, # Default scale_x
@@ -138,6 +139,22 @@ protected
 	#   - boolean
 	def face_left?
 		90 < @angle && @angle < 270
+	end
+
+	# Returns the angle to use when drawing the Prawn in the GameWindow.
+	#
+	# * *Args*    :
+	#   - +boolean+ +face_left+ -> Whether the Prawn faces left or not
+	# * *Returns* :
+	#   - The draw angle to use
+	# * *Return* *Type* :
+	#   - Numeric
+	def draw_angle(face_left)
+		if face_left
+			180 - @angle
+		else
+			@angle
+		end
 	end
 
 end

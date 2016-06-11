@@ -29,8 +29,8 @@ class SubmarineTester < Test::Unit::TestCase
 		y = 2
 		angle = 45
 
-		fake_prawn.expect(:x=, nil, [x])
-		fake_prawn.expect(:y=, nil, [y])
+		fake_prawn.expect(:x=, nil, [Numeric])
+		fake_prawn.expect(:y=, nil, [Numeric])
 		fake_prawn.expect(:angle=, nil, [angle])
 
 		sub = Submarine.new(x, y, angle, fake_prawn)
@@ -747,6 +747,20 @@ class SubmarineTester < Test::Unit::TestCase
 		@sub.prawn.verify
 		assert(!@sub.player_moved)
 		assert(!@sub.moved_y_axis)
+	end
+
+	def test_set_prawn_check_attributes
+		@sub.prawn = nil
+		fake_prawn = MiniTest::Mock.new
+
+		fake_prawn.expect(:x=, nil, [Numeric])
+		fake_prawn.expect(:y=, nil, [Numeric])
+		fake_prawn.expect(:angle=, nil, [Numeric])
+		@sub.send(:set_prawn, fake_prawn)
+
+		fake_prawn.expect(:nil?, false, [])
+		assert_not_nil(@sub.prawn)
+		fake_prawn.verify
 	end
 
 private
