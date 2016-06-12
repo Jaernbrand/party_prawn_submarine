@@ -2,10 +2,11 @@
 require 'gosu'
 
 require_relative '../constants'
+require_relative 'base_entity'
 
 # Represents a prawn in the game. The class mostly contains logic for graphical
 # representation in the GameWindow.
-class Prawn
+class Prawn < BaseEntity
 
 	PRAWN_IMAGE_PATH = Constants::IMAGE_PATH + "prawn.png"
 	PRAWN_SKIN_PATH = Constants::IMAGE_PATH + "prawn_skin.png"
@@ -15,6 +16,7 @@ class Prawn
 	# In pixels.
 	TILE_HEIGHT = 46
 
+	# The z layer where Prawns are drawn. Used by the #draw method.
 	PRAWN_Z = 4
 
 	# In milli seconds
@@ -26,10 +28,8 @@ class Prawn
 	# Boolean indicating whether the Prawn is currently swimming.
 	attr_accessor :swimming
 
-	# The PartyHorn of the Prawn object. TODO Remove accessor?
+	# The PartyHorn of the Prawn object. 
 	attr_accessor :party_horn
-
-	attr_accessor :x, :y, :angle
 
 	# Initialises a new Prawn with the given player as owner.
 	#
@@ -39,9 +39,7 @@ class Prawn
 		@player = player
 		@party_horn = party_horn
 
-		@x = 0
-		@y = 0
-		@angle = 0
+		@x = @y = @angle = 0
 
 		@swimming = false
 
@@ -128,32 +126,6 @@ protected
 			post_adj = 4
 			pre_adj = post_adj - 1 
 			@tile_idx = ((@tile_idx - pre_adj) % animation_frames) + post_adj
-		end
-	end
-
-	# Returns whether the Prawn faces to the left.
-	#
-	# * *Returns* :
-	#   - +true+ if the Prawn faces to the left
-	# * *Return* *Type* :
-	#   - boolean
-	def face_left?
-		90 < @angle && @angle < 270
-	end
-
-	# Returns the angle to use when drawing the Prawn in the GameWindow.
-	#
-	# * *Args*    :
-	#   - +boolean+ +face_left+ -> Whether the Prawn faces left or not
-	# * *Returns* :
-	#   - The draw angle to use
-	# * *Return* *Type* :
-	#   - Numeric
-	def draw_angle(face_left)
-		if face_left
-			180 - @angle
-		else
-			@angle
 		end
 	end
 

@@ -2,8 +2,9 @@ require 'gosu'
 
 require_relative '../constants'
 require_relative 'torpedo'
+require_relative 'base_entity'
 
-class Submarine
+class Submarine < BaseEntity
 
 	SUB_IMAGE_PATH = Constants::IMAGE_PATH + "submarine.png"
 	SUB_SKIN_PATH = Constants::IMAGE_PATH + "submarine_skin.png"
@@ -13,6 +14,7 @@ class Submarine
 	# In pixels.
 	SUB_TILE_HEIGHT = 135
 
+	# The z layer where Submarines are drawn. Used by the #draw method.
 	SUB_Z = 2
 
 	# In seconds.
@@ -34,10 +36,8 @@ class Submarine
 	# user.
 	attr_accessor :game_state
 
-	# The angle of the Submarine in degrees.
-	attr_reader :angle
-
-	attr_reader :x, :y, :max_speed
+	# The maximum speed of the Submarine.
+	attr_reader :max_speed
 
 	# Initialises a new Submarine instance with the given coordinate and with
 	# the given angle.
@@ -285,19 +285,6 @@ protected
 		@prawn.angle = angle
 	end
 
-	# Calculates the angle of the Submarine if the angle is change the given 
-	# number of degrees.
-	#
-	# * *Args*    :
-	#   - +Numeric+ +change+ -> The change in degrees
-	# * *Returns* :
-	#   - The new angle in degrees
-	# * *Return* *Type* :
-	#   - Numeric
-	def calculate_angle(change)
-		(@angle + change) % 360
-	end
-
 	# Adjusts the given number closer to 0 according to the given adjustment 
 	# value and returns the result. If 0 can be reached or passed with the 
 	# given arguments, then 0 is returned.
@@ -384,7 +371,7 @@ private
 	#   - +boolean+ +sub_face_left+ -> Whether the Submarine faces left or not
 	def draw_sub(sub_face_left)
 		idx = sub_tile_index(sub_face_left)
-		angle = sub_draw_angle(sub_face_left)
+		angle = draw_angle(sub_face_left)
 
 		sub_img = @@tiles[idx]
 		sub_img.draw_rot(@x, @y, SUB_Z, angle)
@@ -401,7 +388,7 @@ private
 						 @player.colour)
 	end
 
-	# Returns the current tile index to use for drrawing the Submarine.
+	# Returns the current tile index to use for drawing the Submarine.
 	#
 	# * *Args*    :
 	#   - +boolean+ +sub_face_left+ -> Whether the Submarine faces left or not
@@ -415,32 +402,6 @@ private
 		else
 			1
 		end
-	end
-
-	# Returns the angle to use when drawing the Submarine in the GameWindow.
-	#
-	# * *Args*    :
-	#   - +boolean+ +sub_face_left+ -> Whether the Submarine faces left or not
-	# * *Returns* :
-	#   - The draw angle to use
-	# * *Return* *Type* :
-	#   - Numeric
-	def sub_draw_angle(sub_face_left)
-		if sub_face_left
-			180 - @angle
-		else
-			@angle
-		end
-	end
-
-	# Returns whether the Submarine faces to the left.
-	#
-	# * *Returns* :
-	#   - +true+ if the Submarine faces to the left
-	# * *Return* *Type* :
-	#   - boolean
-	def face_left?
-		90 < @angle && @angle < 270
 	end
 
 end

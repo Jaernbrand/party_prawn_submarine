@@ -675,7 +675,6 @@ class SubmarineTester < Test::Unit::TestCase
 	end
 
 	def test_update_player_not_moved_sub_is_plane
-		start_x = 0
 		@sub.player_moved = false
 
 		setup_drift_x_mock
@@ -731,7 +730,6 @@ class SubmarineTester < Test::Unit::TestCase
 	end
 
 	def test_update_player_moved_y_axis_sub_is_not_plane
-		start_y = 0
 		start_angle = 90
 		@sub.player_moved = true
 		@sub.moved_y_axis = true
