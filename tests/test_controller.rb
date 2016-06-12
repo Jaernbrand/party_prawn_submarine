@@ -233,7 +233,6 @@ class ControllerTester < Test::Unit::TestCase
 	end
 
 	def test_buttons_pressed_empty_previous_pressed
-		id = 40
 		bt_held = MiniTest::Mock.new
 		controller = Controller.new(MiniTest::Mock.new, 
 									MiniTest::Mock.new, 
