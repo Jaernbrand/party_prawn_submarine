@@ -47,6 +47,11 @@ class GameFactory
 		:torpedo => :try_fire_torpedo}
 	end
 
+	# TODO Move somewhere else.
+	def party_horn_callback_methods
+		{:blow_party_horn => :blow}
+	end
+
 	def add_method_callbacks(all_callbacks, object, methods)
 		methods.each do |label, method_name|
 			all_callbacks[label] = object.public_method(method_name)
