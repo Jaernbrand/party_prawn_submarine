@@ -10,6 +10,7 @@ module Controls
 		controls[:left] = Gosu::KbLeft
 		controls[:right] = Gosu::KbRight
 		controls[:torpedo] = Gosu::KbSpace
+		controls[:blow_party_horn] = Gosu::KbQ
 		controls
 	end
 

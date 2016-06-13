@@ -4,7 +4,10 @@ require_relative 'game_window'
 
 require_relative 'player'
 require_relative 'controls'
-require_relative 'game_factory'
+
+require_relative 'factories/game_factory'
+require_relative 'factories/game_controller_factory'
+
 require_relative 'game_states/play_state'
 
 require_relative 'entities/submarine' 
@@ -26,7 +29,7 @@ if __FILE__ == $0
 		cls::preload(window)
 	end
 
-	factory = GameFactory.new
+	factory = GameFactory.new(GameControllerFactory.new)
 	play_state = factory.create_game(player)
 
 	window.state = play_state
