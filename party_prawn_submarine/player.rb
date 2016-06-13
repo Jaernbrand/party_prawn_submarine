@@ -1,11 +1,11 @@
 
 class Player
 
-	attr_accessor :name, :colour
+	attr_accessor :name, :colour, :submarine, :party_horn
 
 	attr_accessor :controls
 
-	def initialize(controls)
+	def initialize(controls={})
 		@controls = controls
 	end
 
