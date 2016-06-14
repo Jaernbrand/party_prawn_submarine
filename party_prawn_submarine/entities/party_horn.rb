@@ -10,6 +10,8 @@ class PartyHorn < BaseEntity
 
 	PARTY_HORN_IMAGE_PATH = Constants::IMAGE_PATH + "party_horn.png"
 
+	PARTY_HORN_SOUND_PATH = Constants::SOUND_PATH + "party-horn.wav"
+
 	# In pixels.
 	PARTY_HORN_TILE_WIDTH = 29
 	# In pixels.
@@ -34,6 +36,7 @@ class PartyHorn < BaseEntity
 	# * *Args*    :
 	#   - +Gosu::Window+ +window+ -> The window to draw the graphical assets in
 	def self.preload(window)
+		@@sound = Gosu::Sample.new(PARTY_HORN_SOUND_PATH)
 		@@tiles = Gosu::Image::load_tiles(window, 
 										 PARTY_HORN_IMAGE_PATH, 
 										 PARTY_HORN_TILE_WIDTH, 
@@ -47,6 +50,7 @@ class PartyHorn < BaseEntity
 			curr_time = Gosu::milliseconds
 			if (curr_time - @start_time).abs > BLOW_DURATION
 				@is_blown = false
+				@has_changed = true
 			end
 		end
 	end
@@ -58,7 +62,11 @@ class PartyHorn < BaseEntity
 	# * *Return* *Type* :
 	#   - boolean
 	def needs_redraw?
-		@is_blown
+		if @has_changed
+			@has_changed = false
+			return true
+		end
+		false
 	end
 
 	# Draws the PartHorn in the GameWindow.
@@ -76,8 +84,9 @@ class PartyHorn < BaseEntity
 
 	# Blows the PartyHorn, causing it to be drawn and play a sound.
 	def blow
-		@is_blown = true
+		@is_blown = @has_changed = true
 		@start_time = Gosu::milliseconds
+		@@sound.play
 	end
 
 end

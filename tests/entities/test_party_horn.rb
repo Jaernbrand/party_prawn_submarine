@@ -12,11 +12,13 @@ class PartyHornTester < Test::Unit::TestCase
 	def setup
 		@party_horn = PartyHorn.new
 		PartyHorn::tiles = nil
+		PartyHorn::sound = nil
 	end
 
 	def test_preload
 		PartyHorn::preload(GameWindow.new)
 		assert_not_nil(PartyHorn::tiles)
+		assert_not_nil(PartyHorn::sound)
 	end
 
 	def test_draw_is_blown_faces_right
@@ -69,13 +71,13 @@ class PartyHornTester < Test::Unit::TestCase
 		end
 	end
 
-	def test_needs_redraw_is_blown
-		@party_horn.is_blown = true
+	def test_needs_redraw_has_changed
+		@party_horn.has_changed = true
 		assert(@party_horn.needs_redraw?)
 	end
 
-	def test_needs_redraw_is_not_blown
-		@party_horn.is_blown = false
+	def test_needs_redraw_has_not_changed
+		@party_horn.has_changed = false
 		assert(!@party_horn.needs_redraw?)
 	end
 
@@ -104,11 +106,18 @@ class PartyHornTester < Test::Unit::TestCase
 	end
 
 	def test_blow
+		PartyHorn.sound = MiniTest::Mock.new
+		PartyHorn.sound.expect(:play, nil, [])
+
 		@party_horn.blow
 		assert(@party_horn.is_blown)
+		PartyHorn.sound.verify
 	end
 
 	def test_blow_assign_start_time
+		PartyHorn.sound = MiniTest::Mock.new
+		PartyHorn.sound.expect(:play, nil, [])
+
 		assert_equal(nil, @party_horn.start_time)
 		@party_horn.blow
 		assert(@party_horn.start_time.instance_of? Fixnum)
