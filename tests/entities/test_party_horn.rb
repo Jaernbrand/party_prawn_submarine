@@ -114,6 +114,11 @@ class PartyHornTester < Test::Unit::TestCase
 		PartyHorn.sound.verify
 	end
 
+	def test_blow_when_already_blown
+		@party_horn.is_blown = true
+		assert_nothing_raised { @party_horn.blow }
+	end
+
 	def test_blow_assign_start_time
 		PartyHorn.sound = MiniTest::Mock.new
 		PartyHorn.sound.expect(:play, nil, [])

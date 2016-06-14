@@ -84,9 +84,11 @@ class PartyHorn < BaseEntity
 
 	# Blows the PartyHorn, causing it to be drawn and play a sound.
 	def blow
-		@is_blown = @has_changed = true
-		@start_time = Gosu::milliseconds
-		@@sound.play
+		if !@is_blown
+			@is_blown = @has_changed = true
+			@start_time = Gosu::milliseconds
+			@@sound.play
+		end
 	end
 
 end
