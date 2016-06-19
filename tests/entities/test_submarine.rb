@@ -897,9 +897,19 @@ class SubmarineTester < Test::Unit::TestCase
 		assert !@sub.overlaps?(other)
 	end
 	
-	def test_collision
+	def test_collision_is_torpedo
 		other = MiniTest::Mock.new
+		other.expect(:is_a?, true, [Class])
 		other.expect(:collision, nil, [@sub])
+
+		@sub.collision(other)
+
+		other.verify
+	end
+
+	def test_collision_is_not_torpedo
+		other = MiniTest::Mock.new
+		other.expect(:is_a?, false, [Class])
 
 		@sub.collision(other)
 

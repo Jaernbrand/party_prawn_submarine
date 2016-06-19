@@ -96,7 +96,9 @@ class Submarine < BaseEntity
 	# * *Args*    :
 	#   - +BaseEntity+ +other+ -> The entity the current one collieded with
 	def collision(other)
-		other.collision(self)
+		if other.is_a?(Torpedo)
+			other.collision(self)
+		end
 	end
 
 	# Updates the Submarine and its Prawn.
