@@ -469,8 +469,8 @@ class SubmarineTester < Test::Unit::TestCase
 		fake_tile = MiniTest::Mock.new
 		fake_skin = MiniTest::Mock.new
 
-		x = 0 
-		y = 0
+		x = 0 + Submarine::SUB_TILE_WIDTH/2.0
+		y = 0 + Submarine::SUB_TILE_HEIGHT/2.0
 		angle = 0
 		centre = 0.5
 		scale = 1
@@ -663,6 +663,8 @@ class SubmarineTester < Test::Unit::TestCase
 	end
 
 	def test_update_player_moved
+		setup_game_state_mock(1000, 1000)
+
 		@sub.player_moved = true
 		
 		@sub.prawn.expect(:swimming=, true, [true])
@@ -675,6 +677,8 @@ class SubmarineTester < Test::Unit::TestCase
 	end
 
 	def test_update_player_not_moved_sub_is_plane
+		setup_game_state_mock(1000, 1000)
+
 		@sub.player_moved = false
 
 		setup_drift_x_mock
@@ -690,6 +694,8 @@ class SubmarineTester < Test::Unit::TestCase
 	end
 
 	def test_update_player_not_moved_drift_x_axis_sub_is_not_plane
+		setup_game_state_mock(1000, 1000)
+
 		start_x = 0
 		start_angle = 90
 		@sub.player_moved = false
@@ -710,6 +716,10 @@ class SubmarineTester < Test::Unit::TestCase
 	end
 
 	def test_update_player_not_moved_y_axis_sub_is_not_plane
+		@sub.game_state = MiniTest::Mock.new
+		@sub.game_state.expect(:width, 1000, [])
+		@sub.game_state.expect(:height, 1000, [])
+
 		start_y = 0
 		start_angle = 90
 		@sub.player_moved = false
@@ -730,6 +740,8 @@ class SubmarineTester < Test::Unit::TestCase
 	end
 
 	def test_update_player_moved_y_axis_sub_is_not_plane
+		setup_game_state_mock(1000, 1000)
+
 		start_angle = 90
 		@sub.player_moved = true
 		@sub.moved_y_axis = true
@@ -747,6 +759,108 @@ class SubmarineTester < Test::Unit::TestCase
 		assert(!@sub.moved_y_axis)
 	end
 
+	def test_check_bounds_outside_left
+		oracle_x = 0
+
+		init_x = -Submarine::SUB_TILE_WIDTH/2
+		init_y = 40
+		@sub.x = init_x
+		@sub.y = init_y
+
+		@sub.game_state = MiniTest::Mock.new
+		@sub.game_state.expect(:width, 1000, [])
+		@sub.game_state.expect(:height, 1000, [])
+
+		setup_accessor_stub(@sub.prawn, "x")
+		setup_accessor_stub(@sub.prawn, "y")
+		setup_accessor_stub(@sub.prawn, "angle")
+
+		@sub.send(:check_bounds)
+
+		assert_equal(oracle_x, @sub.x)
+		assert_equal(init_y, @sub.y)
+	end
+
+	def test_check_bounds_outside_right
+		width = 400
+		init_x = width - Submarine::SUB_TILE_WIDTH/2
+		init_y = 40
+		@sub.x = init_x
+		@sub.y = init_y
+
+		@sub.game_state = MiniTest::Mock.new
+		@sub.game_state.expect(:width, width, [])
+		@sub.game_state.expect(:height, 1000, [])
+
+		setup_accessor_stub(@sub.prawn, "x")
+		setup_accessor_stub(@sub.prawn, "y")
+		setup_accessor_stub(@sub.prawn, "angle")
+
+		@sub.send(:check_bounds)
+
+		assert_equal(width - Submarine::SUB_TILE_WIDTH, @sub.x)
+		assert_equal(init_y, @sub.y)
+	end
+
+	def test_check_bounds_outside_top
+		oracle_y = 0
+
+		init_x = 40
+		init_y = -Submarine::SUB_TILE_HEIGHT/2
+		@sub.x = init_x
+		@sub.y = init_y
+
+		@sub.game_state = MiniTest::Mock.new
+		@sub.game_state.expect(:width, 1000, [])
+		@sub.game_state.expect(:height, 1000, [])
+
+		setup_accessor_stub(@sub.prawn, "x")
+		setup_accessor_stub(@sub.prawn, "y")
+		setup_accessor_stub(@sub.prawn, "angle")
+
+		@sub.send(:check_bounds)
+
+		assert_equal(init_x, @sub.x)
+		assert_equal(oracle_y, @sub.y)
+	end
+
+	def test_check_bounds_outside_bottom
+		height = 400
+		init_x = 40
+		init_y = height - Submarine::SUB_TILE_HEIGHT/2
+		@sub.x = init_x
+		@sub.y = init_y
+
+		@sub.game_state = MiniTest::Mock.new
+		@sub.game_state.expect(:width, 1000, [])
+		@sub.game_state.expect(:height, height, [])
+
+		setup_accessor_stub(@sub.prawn, "x")
+		setup_accessor_stub(@sub.prawn, "y")
+		setup_accessor_stub(@sub.prawn, "angle")
+
+		@sub.send(:check_bounds)
+
+		assert_equal(init_x, @sub.x)
+		assert_equal(height - Submarine::SUB_TILE_HEIGHT, @sub.y)
+	end
+
+	def test_check_bounds_inside
+		init_x = 40
+		init_y = 40
+		@sub.x = init_x
+		@sub.y = init_y
+
+		@sub.game_state = MiniTest::Mock.new
+		@sub.game_state.expect(:width, 1000, [])
+		@sub.game_state.expect(:height, 1000, [])
+
+		@sub.send(:check_bounds)
+
+		assert_equal(init_x, @sub.x)
+		assert_equal(init_y, @sub.y)
+	end
+
 	def test_set_prawn_check_attributes
 		@sub.prawn = nil
 		fake_prawn = MiniTest::Mock.new
@@ -760,6 +874,38 @@ class SubmarineTester < Test::Unit::TestCase
 		assert_not_nil(@sub.prawn)
 		fake_prawn.verify
 	end
+
+	def test_overlaps_does_overlap
+		other = BaseEntity.new
+		other.x = Submarine::SUB_TILE_WIDTH/2
+		other.y = Submarine::SUB_TILE_HEIGHT/2
+		other.width = 200
+		other.height = 200
+		other.angle = 0
+
+		assert @sub.overlaps?(other)
+	end
+
+	def test_overlaps_does_not_overlap
+		other = BaseEntity.new
+		other.x = 400 + Submarine::SUB_TILE_WIDTH
+		other.y = 400 + Submarine::SUB_TILE_HEIGHT
+		other.width = 200
+		other.height = 200
+		other.angle = 0
+
+		assert !@sub.overlaps?(other)
+	end
+	
+	def test_collision
+		other = MiniTest::Mock.new
+		other.expect(:collision, nil, [@sub])
+
+		@sub.collision(other)
+
+		other.verify
+	end
+
 
 private
 	
@@ -797,6 +943,12 @@ private
 			acc += speed
 		end
 		acc
+	end
+
+	def setup_game_state_mock(w, h)
+		@sub.game_state = MiniTest::Mock.new
+		@sub.game_state.expect(:width, w, [])
+		@sub.game_state.expect(:height, h, [])
 	end
 
 end

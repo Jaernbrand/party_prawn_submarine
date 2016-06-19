@@ -18,6 +18,7 @@ class PlayState
 	def initialize(entities = [])
 		@all_entities = entities
 		@rm_marked = []
+		@has_removed = false
 	end
 
 	# Preloads the assets needed by the PlayState.
@@ -50,17 +51,8 @@ class PlayState
 		@all_entities.each do |entity|
 			entity.update
 		end
+		detect_collisions
 		remove_marked
-	end
-
-	# Removes all entities that are marked for death.
-	def remove_marked
-		i = @rm_marked.length-1
-		while i >= 0 
-			curr_marked = @rm_marked.delete_at(i)
-			remove_entity(curr_marked)
-			i -= 1
-		end
 	end
 
 	# Markes the given entity to be removed from the PlayState.
@@ -78,6 +70,10 @@ class PlayState
 	# * *Return* *Type* :
 	#   - boolean
 	def needs_redraw?
+		if @has_removed
+			@has_removed = false
+			return true
+		end
 		@all_entities.each do |entity|
 			if entity.needs_redraw?
 				return true
@@ -94,21 +90,6 @@ class PlayState
 			entity.draw
 		end
 	end
-
-	# Draws the background of the PlayState.
-	def draw_background
-		x = y = 0
-		begin
-			@@img.draw(x, y, BACKGROUND_Z)
-
-			x += @@img.width
-			if x > @width
-				x = 0
-				y += @@img.height
-			end
-		end until y > @height
-	end
-
 
 	# Adds the given entity to the PlayState and sets the +game_state+ 
 	# attribute of the entity to the PlayState instance.
@@ -158,14 +139,72 @@ class PlayState
 		outside_x_bounds?(x, w) || outside_y_bounds?(y, h)
 	end
 
+
+protected
+
+	# Detects collisions between the entities and resolves any found collisions.
+	def detect_collisions
+		@all_entities.each do |entity|
+			@all_entities.each do |other|
+				if entity.overlaps?(other)
+					entity.collision(other)
+				end
+			end
+		end	
+	end
+
+	# Removes all entities that are marked for death.
+	def remove_marked
+		i = @rm_marked.length-1
+		@has_removed = true if i >= 0
+		while i >= 0 
+			curr_marked = @rm_marked.delete_at(i)
+			remove_entity(curr_marked)
+			i -= 1
+		end
+	end
+
+
 private
 
+	# Checks if the x coordinates are outside the bounds of the PlayState.
+	#
+	# * *Args*    :
+	#   - +Numeric+ +x+ -> The x value to check
+	#   - +Numeric+ +w+ -> The width of the accompanying the x value
+	# * *Returns* :
+	#   - +true+ if the parameters are outside the PlayState's bounds
+	# * *Return* *Type* :
+	#   - boolean
 	def outside_x_bounds?(x, w)
 		x + w < 0 || x > @width
 	end
 
+	# Checks if the y coordinates are outside the bounds of the PlayState.
+	#
+	# * *Args*    :
+	#   - +Numeric+ +y+ -> The y value to check
+	#   - +Numeric+ +h+ -> The height of the accompanying the y value
+	# * *Returns* :
+	#   - +true+ if the parameters are outside the PlayState's bounds
+	# * *Return* *Type* :
+	#   - boolean
 	def outside_y_bounds?(y, h)
 		y + h < 0 || y > @height
+	end
+
+	# Draws the background of the PlayState.
+	def draw_background
+		x = y = 0
+		begin
+			@@img.draw(x, y, BACKGROUND_Z)
+
+			x += @@img.width
+			if x > @width
+				x = 0
+				y += @@img.height
+			end
+		end until y > @height
 	end
 
 end

@@ -79,7 +79,7 @@ class Prawn < BaseEntity
 			@tile_idx = 3
 		end
 
-		# TODO Set x, y and angle of party horn
+		move_party_horn
 		@party_horn.update
 	end
 
@@ -95,13 +95,14 @@ class Prawn < BaseEntity
 
 	# Draws the Prawn in the GameWindow.
 	def draw
+		@party_horn.draw
 		angle = draw_angle(face_left?)
 		prawn_img = @@tiles[@tile_idx]
-		prawn_img.draw_rot(@x, @y, PRAWN_Z, angle)
+		prawn_img.draw_rot(@x+TILE_WIDTH/2, @y+TILE_HEIGHT/2, PRAWN_Z, angle)
 
 		prawn_skin = @@skins[@tile_idx] 
-		prawn_skin.draw_rot(@x, 
-						 @y, 
+		prawn_skin.draw_rot(@x + TILE_WIDTH/2, 
+						 @y + TILE_HEIGHT/2, 
 						 PRAWN_Z, 
 						 angle, 
 						 0.5, # Default center_x 
@@ -127,6 +128,22 @@ protected
 			pre_adj = post_adj - 1 
 			@tile_idx = ((@tile_idx - pre_adj) % animation_frames) + post_adj
 		end
+	end
+
+
+private
+
+
+	# Sets the coordinates of the Prawn's PartyHorn.
+	def move_party_horn
+		if face_left?
+			@party_horn.x = @x + 
+							(TILE_WIDTH/4 - PartyHorn::PARTY_HORN_TILE_WIDTH)
+		else
+			@party_horn.x = @x + 3 * TILE_WIDTH/4
+		end
+		@party_horn.y = @y + 3 * TILE_HEIGHT/5
+		@party_horn.angle = @angle
 	end
 
 end

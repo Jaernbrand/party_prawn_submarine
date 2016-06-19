@@ -4,6 +4,7 @@ require 'minitest/mock'
 
 require 'entities/torpedo'
 require 'game_window'
+require 'player'
 
 require_relative 'torpedo_extension'
 
@@ -71,8 +72,8 @@ class TorpedoTester < Test::Unit::TestCase
 		x_piv = 0.5
 		y_piv = 0.5
 		scale = 1
-		args = [x, 
-		  		y, 						
+		args = [x + Torpedo::IMG_WIDTH/2.0, 
+				y + Torpedo::IMG_HEIGHT/2.0, 						
 				Torpedo::TORPEDO_Z,
 				angle,
 				x_piv,
@@ -139,6 +140,69 @@ class TorpedoTester < Test::Unit::TestCase
 		@torpedo.needs_redraw?
 		assert(!@torpedo.needs_redraw?)
 	end
+
+	def test_overlaps_does_overlap
+		other = BaseEntity.new
+		other.x = 200
+		other.y = 200
+		other.width = 200
+		other.height = 200
+		other.angle = 0
+
+		assert !@torpedo.overlaps?(other)
+	end
+
+	def test_overlaps_does_not_overlap
+		other = BaseEntity.new
+		other.x = Torpedo::IMG_WIDTH/2
+		other.y = Torpedo::IMG_HEIGHT/2
+		other.width = 200
+		other.height = 200
+		other.angle = 0
+
+		assert @torpedo.overlaps?(other)
+	end
+	
+	def test_collision_not_submarine
+		other = MiniTest::Mock.new
+		other.expect(:is_a?, false, [Class])
+
+		@torpedo.collision(other)
+
+		other.verify
+	end
+
+	def test_collision_submarine_other_player
+		player1 = Player.new
+		@torpedo.player = player1
+
+		player2 = Player.new
+
+		other = MiniTest::Mock.new
+		other.expect(:is_a?, true, [Class])
+		other.expect(:player, player2, [])
+
+		@torpedo.game_state = MiniTest::Mock.new
+		@torpedo.game_state.expect(:death_mark, nil, [BaseEntity])
+
+		@torpedo.collision(other)
+
+		other.verify
+	end
+
+	def test_collision_submarine_same_player
+		player = Player.new
+		@torpedo.player = player
+
+		other = MiniTest::Mock.new
+		other.expect(:is_a?, true, [Class])
+		other.expect(:player, player, [])
+
+		@torpedo.collision(other)
+
+		other.verify
+	end
+
 
 private
 

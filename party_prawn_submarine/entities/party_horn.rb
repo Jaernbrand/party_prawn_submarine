@@ -78,7 +78,10 @@ class PartyHorn < BaseEntity
 			idx = is_facing_left ? 0 : 1
 
 			img = @@tiles[idx]
-			img.draw_rot(@x, @y, PARTY_HORN_Z, angle)
+			img.draw_rot(@x + PARTY_HORN_TILE_WIDTH/2.0, 
+						 @y + PARTY_HORN_TILE_HEIGHT/2.0, 
+						 PARTY_HORN_Z, 
+						 angle)
 		end
 	end
 

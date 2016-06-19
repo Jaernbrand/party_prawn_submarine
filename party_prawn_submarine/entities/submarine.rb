@@ -4,6 +4,7 @@ require_relative '../constants'
 require_relative 'torpedo'
 require_relative 'base_entity'
 
+# Submarine controlled by a player.
 class Submarine < BaseEntity
 
 	SUB_IMAGE_PATH = Constants::IMAGE_PATH + "submarine.png"
@@ -51,6 +52,9 @@ class Submarine < BaseEntity
 		@x = x
 		@y = y
 
+		@width = SUB_TILE_WIDTH
+		@height = SUB_TILE_HEIGHT
+
 		@torpedo_reload_time = STD_TORPEDO_RELOAD_TIME
 		@torpedo_launched = Time.at(0)
 
@@ -87,6 +91,14 @@ class Submarine < BaseEntity
 											  false)
 	end
 
+	# Calls other's collision method with self as argument.
+	#
+	# * *Args*    :
+	#   - +BaseEntity+ +other+ -> The entity the current one collieded with
+	def collision(other)
+		other.collision(self)
+	end
+
 	# Updates the Submarine and its Prawn.
 	def update
 		if @player_moved
@@ -99,6 +111,8 @@ class Submarine < BaseEntity
 		if !@moved_y_axis && !is_plane
 			stabilise
 		end
+
+		check_bounds
 
 		@prawn.update
 		@player_moved = @moved_y_axis = false
@@ -148,7 +162,7 @@ class Submarine < BaseEntity
 			update_angle(calculate_angle(180))
 		end
 
-		@has_moved = @player_moved =true
+		@has_moved = @player_moved = true
 	end
 
 	# Moves the Submarine upwards.
@@ -250,7 +264,7 @@ protected
 	# Submarine. 
 	def fire_torpedo
 		x = (@x + @@tiles[0].width/2) - Torpedo::IMG_WIDTH / 2
-		y = (@y + @@tiles[0].height/2) - Torpedo::IMG_HEIGHT
+		y = (@y + @@tiles[0].height/2)
 
 		torpedo = Torpedo.new(x, y, @angle)
 		torpedo.player = @player
@@ -359,10 +373,26 @@ private
 	#   - +Prawn+ +prawn+ -> The new Prawn of the Submarine
 	def set_prawn(prawn)
 		@prawn = prawn
-		prawn_x_adjust = Prawn::TILE_WIDTH/2 + Prawn::TILE_WIDTH/4
-		@prawn.x = (@x + SUB_TILE_WIDTH/2) - prawn_x_adjust
-		@prawn.y = (@y + SUB_TILE_HEIGHT/2) - Prawn::TILE_HEIGHT
+		@prawn.x = @x + SUB_TILE_WIDTH/2.0 - Prawn::TILE_WIDTH/2 
+		@prawn.y = @y + SUB_TILE_HEIGHT/2.0 
 		@prawn.angle = @angle
+	end
+
+	# Checks if the Submarine is inside the bounds of the game state and
+	# adjusts the position of the Submarine if the Submarine is outside
+	# of the game state bounds, thus forcing the player to move inside the
+	# bounds of the game state.
+	def check_bounds
+		if @x + SUB_TILE_WIDTH > @game_state.width
+			update_x( -(@x + SUB_TILE_WIDTH - @game_state.width) )
+		elsif @x < 0
+			update_x( @x.abs )
+		end
+		if @y + SUB_TILE_HEIGHT > @game_state.height
+			update_y( -(@y + SUB_TILE_HEIGHT - @game_state.height) )
+		elsif @y < 0
+			update_y( @y.abs )
+		end
 	end
 
 	# Draws the graphical representation of the Submarine in the GameWindow.
@@ -374,11 +404,15 @@ private
 		angle = draw_angle(sub_face_left)
 
 		sub_img = @@tiles[idx]
-		sub_img.draw_rot(@x, @y, SUB_Z, angle)
+		# NOTE! #draw_rot puts the centre of the image at the given coordinate!
+		sub_img.draw_rot(@x + SUB_TILE_WIDTH/2.0, 
+						 @y + SUB_TILE_HEIGHT/2.0, 
+						 SUB_Z, 
+						 angle)
 
 		sub_img = @@skins[idx]
-		sub_img.draw_rot(@x, 
-						 @y, 
+		sub_img.draw_rot(@x + SUB_TILE_WIDTH/2.0, 
+						 @y + SUB_TILE_HEIGHT/2.0, 
 						 SUB_Z, 
 						 angle, 
 						 0.5, # Default center_x 

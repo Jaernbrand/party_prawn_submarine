@@ -23,6 +23,10 @@ class PrawnTester < Test::Unit::TestCase
 	def test_update_party_horn_is_updated
 		@prawn.party_horn = MiniTest::Mock.new
 
+		@prawn.party_horn.expect(:x=, nil, [Numeric])
+		@prawn.party_horn.expect(:y=, nil, [Numeric])
+		@prawn.party_horn.expect(:angle=, nil, [Numeric])
+
 		@prawn.party_horn.expect(:update, nil, [])
 
 		@prawn.update
@@ -63,6 +67,9 @@ class PrawnTester < Test::Unit::TestCase
 	end
 
 	def test_draw
+		@prawn.party_horn = MiniTest::Mock.new
+		@prawn.party_horn.expect(:draw, nil, [])
+
 		@prawn.player = MiniTest::Mock.new
 		@prawn.player.expect(:colour, 0xff_ff0000, [])
 
@@ -248,6 +255,41 @@ class PrawnTester < Test::Unit::TestCase
 		@prawn.angle = 10
 		face_left = false
 		assert_equal(oracle, @prawn.send(:draw_angle, face_left))
+	end
+
+	def test_move_party_horn_face_right
+		@prawn.party_horn = MiniTest::Mock.new
+	
+		# The prawn is currently placed at coordiante (0, 0)
+		x = 3 * Prawn::TILE_WIDTH/4
+		y = 3 * Prawn::TILE_HEIGHT/5
+		angle = 0
+		@prawn.party_horn.expect(:x=, nil, [x])
+		@prawn.party_horn.expect(:y=, nil, [y])
+		@prawn.party_horn.expect(:angle=, nil, [angle])
+
+		@prawn.send(:move_party_horn)
+
+		@prawn.party_horn.verify
+	end
+
+	def test_move_party_horn_face_left
+		@prawn.party_horn = MiniTest::Mock.new
+	
+		# The prawn is currently placed at coordiante (0, 0)
+		x = Prawn::TILE_WIDTH/4 - PartyHorn::PARTY_HORN_TILE_WIDTH
+		y = 3 * Prawn::TILE_HEIGHT/5
+		angle = 180
+
+		@prawn.angle = angle
+
+		@prawn.party_horn.expect(:x=, nil, [x])
+		@prawn.party_horn.expect(:y=, nil, [y])
+		@prawn.party_horn.expect(:angle=, nil, [angle])
+
+		@prawn.send(:move_party_horn)
+
+		@prawn.party_horn.verify
 	end
 
 end

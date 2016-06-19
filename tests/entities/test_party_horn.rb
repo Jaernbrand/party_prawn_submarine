@@ -26,8 +26,8 @@ class PartyHornTester < Test::Unit::TestCase
 		PartyHorn::tiles = MiniTest::Mock.new
 		fake_img = MiniTest::Mock.new
 
-		args = [0, # x
-				0, # y
+		args = [PartyHorn::PARTY_HORN_TILE_WIDTH/2.0, # x
+				PartyHorn::PARTY_HORN_TILE_HEIGHT/2.0, # y
 				PartyHorn::PARTY_HORN_Z,
 				0] # angle
 		fake_img.expect(:draw_rot, nil, args)
@@ -50,8 +50,8 @@ class PartyHornTester < Test::Unit::TestCase
 		PartyHorn::tiles = MiniTest::Mock.new
 		fake_img = MiniTest::Mock.new
 
-		args = [0, # x
-				0, # y
+		args = [PartyHorn::PARTY_HORN_TILE_WIDTH/2.0, # x
+				PartyHorn::PARTY_HORN_TILE_HEIGHT/2.0, # y
 				PartyHorn::PARTY_HORN_Z,
 				180 - angle] # Because of the face_left adjustment
 		fake_img.expect(:draw_rot, nil, args)

@@ -69,6 +69,24 @@ class PlayStateTester < Test::Unit::TestCase
 		assert(outside)
 	end
 
+	def test_outside_bounds_x_inside_w_outside
+		x = WIDTH - 20
+		y = 20
+		w = WIDTH + 20
+		h = 40
+		outside = @play_state.outside_bounds?(x, y, w, h)
+		assert(!outside)
+	end
+
+	def test_outside_bounds_y_inside_h_outside
+		x = 20
+		y = HEIGHT - 20
+		w = 40
+		h = HEIGHT + 20
+		outside = @play_state.outside_bounds?(x, y, w, h)
+		assert(!outside)
+	end
+
 	def test_add_entity
 		oracle_ent_length = 1
 
@@ -110,6 +128,7 @@ class PlayStateTester < Test::Unit::TestCase
 		entity = MiniTest::Mock.new
 		entity.expect(:update, nil, [])
 		entity.expect(:game_state=, nil, [@play_state])
+		entity.expect(:overlaps?, false, [entity])
 
 		@play_state.add_entity(entity)
 		@play_state.update
@@ -128,6 +147,7 @@ class PlayStateTester < Test::Unit::TestCase
 			entities[i] = MiniTest::Mock.new
 			entities[i].expect(:update, nil, [])
 			entities[i].expect(:game_state=, nil, [@play_state])
+			entities[i].expect(:overlaps?, false, [Object])
 			@play_state.add_entity(entities[i])
 		end
 
@@ -165,10 +185,28 @@ class PlayStateTester < Test::Unit::TestCase
 
 		@play_state.all_entities = [entity]
 		@play_state.death_mark(entity)
-		@play_state.remove_marked
+		@play_state.send(:remove_marked)
 
 		assert_equal(oracle_rm_length, @play_state.rm_marked.length)
 		assert_equal(oracle_ent_length, @play_state.all_entities.length)
+	end
+
+	def test_remove_marked_has_removed_set
+		entity = MiniTest::Mock.new
+		entity.expect(:equal?, true, [entity])
+
+		@play_state.all_entities = [entity]
+		@play_state.death_mark(entity)
+		@play_state.send(:remove_marked)
+
+		assert(@play_state.has_removed)
+	end
+
+	def test_remove_marked_has_removed_not_set_when_nothing_to_remove
+		@play_state.all_entities = []
+		@play_state.send(:remove_marked)
+
+		assert(!@play_state.has_removed)
 	end
 
 	def test_needs_redraw_entities_dont_need_redraw
@@ -185,6 +223,17 @@ class PlayStateTester < Test::Unit::TestCase
 		@play_state.all_entities = [entity]
 
 		assert(@play_state.needs_redraw?)
+	end
+
+	def test_needs_redraw_has_removed_entity
+		@play_state.has_removed = true
+		assert(@play_state.needs_redraw?)
+	end
+
+	def test_needs_redraw_has_removed_is_reset
+		@play_state.has_removed = true
+		@play_state.needs_redraw?
+		assert(!@play_state.has_removed)
 	end
 
 	def test_needs_redraw_no_entities
@@ -243,6 +292,28 @@ class PlayStateTester < Test::Unit::TestCase
 		@play_state.button_up(id)
 
 		@play_state.controller.verify
+	end
+
+	def detect_collisions_one_entity_no_overlap
+		fake_entity = MiniTest::Mock.new
+		# Should not overlap with itself.
+		fake_entity.expect(:overlaps?, false, [fake_entity])
+
+		@play_state.all_entities = [fake_entity]
+		@play_state.send(:detect_collisions)
+
+		fake_entity.verify
+	end
+
+	def detect_collisions_one_entity_overlaps
+		fake_entity = MiniTest::Mock.new
+		fake_entity.expect(:overlaps?, true, [fake_entity])
+		fake_entity.expect(:collision?, nil, [fake_entity])
+
+		@play_state.all_entities = [fake_entity]
+		@play_state.send(:detect_collisions)
+
+		fake_entity.verify
 	end
 
 

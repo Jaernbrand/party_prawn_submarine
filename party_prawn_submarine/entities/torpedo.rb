@@ -1,7 +1,10 @@
 
 require_relative '../constants'
+require_relative 'base_entity'
 
-class Torpedo
+# Torpedo fire by a player's Submarine to sink other Submarines. Only moves
+# in a straight line.
+class Torpedo < BaseEntity
 
 	TORPEDO_IMAGE_PATH = Constants::IMAGE_PATH + "torpedo.png"
 
@@ -15,12 +18,11 @@ class Torpedo
 
 	TORPEDO_Z = 1
 
-	attr_accessor :player, :game_state
-
-	attr_reader :x, :y
+	# The Player who owns the Torpedo
+	attr_accessor :player
 	
-	# Angle of the Torpedo in degrees.
-	attr_reader :angle
+	# The game state in which the Torpedo is contained
+	attr_accessor :game_state
 
 	# Initialises a new Torpedo instance with the given coordinate and with
 	# the given angle.
@@ -32,6 +34,10 @@ class Torpedo
 	def initialize(x, y, angle)
 		@x = x
 		@y = y
+
+		@width = IMG_WIDTH
+		@height = IMG_HEIGHT
+
 		@move_speed = STD_MOVE_SPEED
 		@angle = angle
 
@@ -44,6 +50,19 @@ class Torpedo
 	#   - +Gosu::Window+ +window+ -> The window to draw the graphical assets in
 	def self.preload(window)
 		@@img = Gosu::Image.new(window, TORPEDO_IMAGE_PATH, false)
+	end
+
+	# Kills the other entity if the other entity is a Submarine or a subclass
+   	# of a Submarine. Does nothing otherwise.
+	#
+	# * *Args*    :
+	#   - +BaseEntity+ +other+ -> The entity the current one collieded with
+	def collision(other)
+		if other.is_a?(Submarine) && other.player != @player
+			@game_state.death_mark(other)
+			@game_state.death_mark(self)
+			# TODO Create explosion
+		end
 	end
 
 	# Updates the state of the Torpedo.
@@ -76,8 +95,8 @@ class Torpedo
 
 	# Draws the Torpedo in the GameWindow.
 	def draw
-		@@img.draw_rot(@x, 
-					  @y, 
+		@@img.draw_rot(@x + IMG_WIDTH/2.0, 
+					   @y + IMG_HEIGHT/2.0, 
 					  TORPEDO_Z, 
 					  @angle, 
 					  0.5, # Default center_x
@@ -85,20 +104,6 @@ class Torpedo
 					  1, # Default scale_x 
 					  1, # Default scale_y
 					  @player.colour)
-	end
-
-private 
-	
-	# Converts degrees to radians.
-	#
-	# * *Args*    :
-	#   - +Numeric+ +deg+ -> Degrees to convert to radians
-	# * *Returns* :
-	#   - The given value in degrees as radians
-	# * *Return* *Type* :
-	#   - Numeric
-	def degrees_to_radians(deg)
-		deg * Math::PI / 180
 	end
 
 end
