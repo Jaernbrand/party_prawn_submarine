@@ -3,7 +3,7 @@
 require_relative 'game_window'
 
 require_relative 'player'
-require_relative 'controls'
+require_relative 'control_mapper'
 
 require_relative 'factories/game_factory'
 require_relative 'factories/game_controller_factory'
@@ -15,9 +15,12 @@ require_relative 'entities/prawn'
 require_relative 'entities/torpedo'
 require_relative 'entities/party_horn'
 
-
-player = Player.new(Controls::get_std_controls)
-player.colour = 0xff_ff0000
+control_mapper = ControlMapper.new
+ctrls = control_mapper.controls
+player1 = Player.new(ctrls[0])
+player1.colour = 0xff_ff0000
+player2 = Player.new(ctrls[1])
+player2.colour = 0xff_00ff00
 
 # TODO Actual main starts here.
 
@@ -30,7 +33,7 @@ if __FILE__ == $0
 	end
 
 	factory = GameFactory.new(GameControllerFactory.new)
-	play_state = factory.create_game(player)
+	play_state = factory.create_game(player1, player2)
 
 	window.state = play_state
 	window.show
