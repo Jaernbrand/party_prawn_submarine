@@ -11,6 +11,8 @@ class Prawn < BaseEntity
 	PRAWN_IMAGE_PATH = Constants::IMAGE_PATH + "prawn.png"
 	PRAWN_SKIN_PATH = Constants::IMAGE_PATH + "prawn_skin.png"
 
+	SWIM_SOUND_PATH = Constants::SOUND_EFFECTS_PATH + "swim.wav"
+
 	# In pixels.
 	TILE_WIDTH = 134
 	# In pixels.
@@ -63,6 +65,7 @@ class Prawn < BaseEntity
 											TILE_WIDTH, 
 											TILE_HEIGHT,
 											false)
+		@@swim_sound = Gosu::Sample.new(SWIM_SOUND_PATH)
 	end
 
 	# Updates the state of the Prawn.
@@ -72,6 +75,7 @@ class Prawn < BaseEntity
 			if (curr_time - @prev_time).abs > @animation_update_interval
 				increment_swim_tile_index
 				@prev_time = curr_time
+				@@swim_sound.play
 			end
 		elsif face_left?
 			@tile_idx = 0

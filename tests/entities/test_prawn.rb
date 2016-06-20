@@ -18,6 +18,8 @@ class PrawnTester < Test::Unit::TestCase
 	def test_preload
 		Prawn::preload(GameWindow.new)
 		assert_not_nil(Prawn::tiles)
+		assert_not_nil(Prawn::skins)
+		assert_not_nil(Prawn::swim_sound)
 	end
 
 	def test_update_party_horn_is_updated
@@ -32,6 +34,25 @@ class PrawnTester < Test::Unit::TestCase
 		@prawn.update
 
 		@prawn.party_horn.verify
+	end
+
+	def test_update_swim_sound_is_played
+		Prawn::swim_sound = MiniTest::Mock.new
+		Prawn::swim_sound.expect(:play, nil, [])
+
+		@prawn.swimming = true
+		@prawn.prev_time = Gosu::milliseconds - 
+							(Prawn::STD_ANIMATION_UPDATE_INTERVAL + 500)
+
+		@prawn.party_horn = MiniTest::Mock.new
+		@prawn.party_horn.expect(:x=, nil, [Numeric])
+		@prawn.party_horn.expect(:y=, nil, [Numeric])
+		@prawn.party_horn.expect(:angle=, nil, [Numeric])
+		@prawn.party_horn.expect(:update, nil, [])
+
+		@prawn.update
+
+		Prawn::swim_sound.verify
 	end
 
 	def test_needs_redraw_not_swimming_party_horn_dont_need_redraw

@@ -22,4 +22,12 @@ class Submarine
 		@@skins=value
 	end
 
+	def self.fire_torpedo_sound
+		@@fire_torpedo_sound
+	end
+
+	def self.fire_torpedo_sound=(value)
+		@@fire_torpedo_sound=value
+	end
+
 end

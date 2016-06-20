@@ -399,6 +399,9 @@ class SubmarineTester < Test::Unit::TestCase
 		fake_tile.expect(:width, 198, [])
 		fake_tile.expect(:height, 135, [])
 
+		Submarine::fire_torpedo_sound = MiniTest::Mock.new
+		Submarine::fire_torpedo_sound.expect(:play, nil, [])
+
 		Submarine::tiles = MiniTest::Mock.new
 		Submarine::tiles.expect(:[], fake_tile, [0])
 
@@ -455,6 +458,7 @@ class SubmarineTester < Test::Unit::TestCase
 
 		assert_not_nil(Submarine::tiles)
 		assert_not_nil(Submarine::skins)
+		assert_not_nil(Submarine::fire_torpedo_sound)
 	end
 
 	def test_draw

@@ -1,4 +1,5 @@
 
+# Defines application wide constants.
 module Constants
 
 	MAJOR_VERSION = "0"
@@ -10,5 +11,6 @@ module Constants
 	IMAGE_PATH = 'assets/images/'
 
 	SOUND_PATH = 'assets/sounds/'
+	SOUND_EFFECTS_PATH = SOUND_PATH + 'effects/'
 
 end

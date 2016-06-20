@@ -10,6 +10,8 @@ class Submarine < BaseEntity
 	SUB_IMAGE_PATH = Constants::IMAGE_PATH + "submarine.png"
 	SUB_SKIN_PATH = Constants::IMAGE_PATH + "submarine_skin.png"
 
+	FIRE_TORPEDO_SOUND_PATH = Constants::SOUND_EFFECTS_PATH + "fire-torpedo.ogg"
+
 	# In pixels.
 	SUB_TILE_WIDTH = 198
 	# In pixels.
@@ -89,6 +91,7 @@ class Submarine < BaseEntity
 											  SUB_TILE_WIDTH,
 											  SUB_TILE_HEIGHT,
 											  false)
+		@@fire_torpedo_sound = Gosu::Sample.new(FIRE_TORPEDO_SOUND_PATH)
 	end
 
 	# Calls other's collision method with self as argument.
@@ -272,6 +275,8 @@ protected
 		torpedo.player = @player
 		@game_state.add_entity(torpedo)
 		@torpedo_launched = Time.new
+
+		@@fire_torpedo_sound.play
 	end
 
 	# Updates the x value of the Submarine and its children by the given amount.

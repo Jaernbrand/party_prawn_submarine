@@ -10,7 +10,7 @@ class PartyHorn < BaseEntity
 
 	PARTY_HORN_IMAGE_PATH = Constants::IMAGE_PATH + "party_horn.png"
 
-	PARTY_HORN_SOUND_PATH = Constants::SOUND_PATH + "party-horn.wav"
+	PARTY_HORN_SOUND_PATH = Constants::SOUND_EFFECTS_PATH + "party-horn.wav"
 
 	# In pixels.
 	PARTY_HORN_TILE_WIDTH = 29
