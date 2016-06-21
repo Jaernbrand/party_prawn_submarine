@@ -173,10 +173,10 @@ class TorpedoTester < Test::Unit::TestCase
 	end
 
 	def test_collision_submarine_other_player
-		player1 = Player.new
+		player1 = Player.new 'Player1'
 		@torpedo.player = player1
 
-		player2 = Player.new
+		player2 = Player.new 'Player2'
 
 		other = MiniTest::Mock.new
 		other.expect(:is_a?, true, [Class])
@@ -191,7 +191,7 @@ class TorpedoTester < Test::Unit::TestCase
 	end
 
 	def test_collision_submarine_same_player
-		player = Player.new
+		player = Player.new 'Player1'
 		@torpedo.player = player
 
 		other = MiniTest::Mock.new
