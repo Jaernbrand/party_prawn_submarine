@@ -184,6 +184,7 @@ class TorpedoTester < Test::Unit::TestCase
 
 		@torpedo.game_state = MiniTest::Mock.new
 		@torpedo.game_state.expect(:death_mark, nil, [BaseEntity])
+		@torpedo.game_state.expect(:add_entity, nil, [Explosion])
 
 		@torpedo.collision(other)
 

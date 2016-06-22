@@ -14,12 +14,13 @@ require_relative 'entities/submarine'
 require_relative 'entities/prawn'
 require_relative 'entities/torpedo'
 require_relative 'entities/party_horn'
+require_relative 'entities/explosion'
 
 control_mapper = ControlMapper.new
 ctrls = control_mapper.controls
-player1 = Player.new(ctrls[0])
+player1 = Player.new('Player1', ctrls[0])
 player1.colour = 0xff_ff0000
-player2 = Player.new(ctrls[1])
+player2 = Player.new('Player2', ctrls[1])
 player2.colour = 0xff_00ff00
 
 # TODO Actual main starts here.
@@ -28,7 +29,7 @@ player2.colour = 0xff_00ff00
 if __FILE__ == $0
 	window = GameWindow.new
 
-	[PlayState, Torpedo, Submarine, Prawn, PartyHorn].each do |cls| 
+	[PlayState, Torpedo, Submarine, Prawn, PartyHorn, Explosion].each do |cls| 
 		cls::preload(window)
 	end
 

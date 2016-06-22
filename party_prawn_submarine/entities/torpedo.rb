@@ -1,6 +1,7 @@
 
 require_relative '../constants'
 require_relative 'base_entity'
+require_relative 'explosion'
 
 # Torpedo fire by a player's Submarine to sink other Submarines. Only moves
 # in a straight line.
@@ -61,7 +62,10 @@ class Torpedo < BaseEntity
 		if other.is_a?(Submarine) && other.player != @player
 			@game_state.death_mark(other)
 			@game_state.death_mark(self)
-			# TODO Create explosion
+
+			explosion = Explosion.new(@x - Explosion::TILE_WIDTH/2, 
+									  @y - Explosion::TILE_HEIGHT/2)
+			@game_state.add_entity(explosion)
 		end
 	end
 

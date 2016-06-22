@@ -3,7 +3,7 @@ require 'entities/explosion'
 
 class Explosion
 
-	attr_accessor :prev_time, :frame
+	attr_accessor :prev_time, :frame, :changed_frame, :game_state
 
 	def self.explosion_sound=(value)
 		@@explosion_sound=value
