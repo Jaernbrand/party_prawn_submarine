@@ -61,4 +61,28 @@ class Player
 		@name <=> other.name
 	end
 
+	# Returns a hash value based on the name of the Player instance.
+	#
+	# * *Returns* :
+	#   - hash based on the name of the Player instance
+	# * *Return* *Type* :
+	#   - Fixnum
+	def hash
+		@name.hash
+	end
+
+	# Two Players are considered equal if their names are considered equal,
+	# which they do if they have the same length and content.
+	#
+	# * *Args*    :
+	#   - +Player+ +other+ -> The other Player to check for equality
+	# * *Returns* :
+	#   - Whether the given object equals the current one
+	# * *Return* *Type* :
+	#   - boolean
+	def eql?(other)
+		@name.eql?(other.name)
+	end
+
 end
+

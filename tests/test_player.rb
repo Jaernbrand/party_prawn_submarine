@@ -41,5 +41,28 @@ class PlayerTester < Test::Unit::TestCase
 		assert_equal(1, @player <=> other)
 	end
 
+	def test_hash_equal
+		assert_equal(@name.hash, @player.hash)
+	end
+
+	def test_hash_not_equal
+		str = 'Player2'
+		assert_not_equal(str.hash, @player.hash)
+	end
+
+	def test_eql_same_object
+		assert(@player.eql?(@player))
+	end
+
+	def test_eql_2_players_same_name
+		other = Player.new(@name)
+		assert(@player.eql?(other))
+	end
+
+	def test_eql_different_namesl
+		other = Player.new('Player2')
+		assert(!@player.eql?(other))
+	end
+
 end
 
