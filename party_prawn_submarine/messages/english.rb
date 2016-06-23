@@ -9,7 +9,7 @@ module English
 	# * *Return* *Type* :
 	#   - Hash<Symbol, String>
 	def self.messages
-		{:winner => "The winner is #{}!",
+		{:winner => "The winner is %s!",
 		:no_winner => "No one won"}
 	end
 
