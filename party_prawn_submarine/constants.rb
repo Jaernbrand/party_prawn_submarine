@@ -1,4 +1,6 @@
 
+require 'gosu'
+
 # Defines application wide constants.
 module Constants
 
@@ -12,5 +14,8 @@ module Constants
 
 	SOUND_PATH = 'assets/sounds/'
 	SOUND_EFFECTS_PATH = SOUND_PATH + 'effects/'
+
+	# The name of the font to use for text
+	FONT_NAME = Gosu::default_font_name
 
 end

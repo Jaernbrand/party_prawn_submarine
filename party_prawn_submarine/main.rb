@@ -34,7 +34,7 @@ if __FILE__ == $0
 	end
 
 	factory = GameFactory.new(GameControllerFactory.new)
-	play_state = factory.create_game(player1, player2)
+	play_state = factory.create_game(window, player1, player2)
 
 	window.state = play_state
 	window.show

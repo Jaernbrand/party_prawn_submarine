@@ -4,7 +4,7 @@ require 'game_states/play_state'
 # Extends PlayState with methods for testing purposes.
 class PlayState
 
-	attr_accessor :all_entities, :rm_marked, :has_removed
+	attr_accessor :all_entities, :rm_marked, :has_removed, :win_msg
 
 	def self.img
 		@@img

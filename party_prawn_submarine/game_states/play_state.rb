@@ -1,5 +1,6 @@
 
 require_relative '../constants'
+require_relative '../gui/text_pane'
 
 # The state in which the game is played. Contains the entities needed to play 
 # the game as well as scene information such as board bounds.
@@ -7,18 +8,38 @@ class PlayState
 
 	BACKGROUND_IMAGE_PATH = Constants::IMAGE_PATH + "water.png"
 
+	# The z layer of teh background. Used by the #draw method.
 	BACKGROUND_Z = 0
+	
+	# The z layer of messages shown to the user.
+	MSG_Z = 1000
+
+	# The text height of messages shown to the user. The height is measured 
+	# in pixels.
+	MSG_HEIGHT = 50
 
 	# Handles button events in the PlayState.
 	attr_accessor :controller
 
-	attr_accessor :width, :height
+	# The width of the PlayState
+	attr_accessor :width
+	
+	# The height of the PlayState
+	attr_accessor :height
+
+	# The judge that decides the winner
+	attr_accessor :judge
+
+	# The GameWindow that the current PlayState is associated with
+	attr_accessor :window
 
 	# Initialises a new PlayState.
 	def initialize(entities = [])
 		@all_entities = entities
 		@rm_marked = []
 		@has_removed = false
+
+		@win_msg = nil
 	end
 
 	# Preloads the assets needed by the PlayState.
@@ -88,6 +109,10 @@ class PlayState
 		draw_background
 		@all_entities.each do |entity|
 			entity.draw
+		end
+
+		if judge.game_over?
+			show_winner(judge.winner)
 		end
 	end
 
@@ -160,6 +185,11 @@ protected
 		while i >= 0 
 			curr_marked = @rm_marked.delete_at(i)
 			remove_entity(curr_marked)
+
+			if (curr_marked.is_a? Submarine)
+				judge.died(curr_marked.player)
+			end
+
 			i -= 1
 		end
 	end
@@ -205,6 +235,39 @@ private
 				y += @@img.height
 			end
 		end until y > @height
+	end
+
+	# Draws the name of the winner on screen.
+	#
+	# * *Args*    :
+	#   - +Player+ +winner+ -> The winning player
+	def show_winner(winner)
+		if !@win_msg
+			@win_msg = create_win_message(winner)
+		end
+
+		@win_msg.draw
+	end
+
+	# Creates the message that presents the winner.
+	#
+	# * *Args*    :
+	#   - +Player+ +winner+ -> The winning player
+	# * *Returns* :
+	#   - The win message as a TextPane
+	# * *Return* *Type* :
+	#   - TextPane
+	def create_win_message(winner)
+		if winner
+			msg = @window.user_messages.message(:winner, winner.name)
+		else
+			msg = @window.user_messages.message(:no_winner)
+		end
+		text_pane = TextPane.new(msg, MSG_HEIGHT, Constants::FONT_NAME, MSG_Z)
+		text_pane.x = @width/2 - text_pane.bg_width/2
+		text_pane.y = @height/2 - text_pane.bg_height/2
+
+		text_pane
 	end
 
 end

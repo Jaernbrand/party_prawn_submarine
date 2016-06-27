@@ -1,6 +1,6 @@
 
 class TextPane
 
-	attr_accessor :font, :text
+	attr_accessor :font
 
 end

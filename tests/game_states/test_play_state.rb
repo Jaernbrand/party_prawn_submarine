@@ -182,6 +182,7 @@ class PlayStateTester < Test::Unit::TestCase
 
 		entity = MiniTest::Mock.new
 		entity.expect(:equal?, true, [entity])
+		entity.expect(:is_a?, false, [Class])
 
 		@play_state.all_entities = [entity]
 		@play_state.death_mark(entity)
@@ -194,6 +195,25 @@ class PlayStateTester < Test::Unit::TestCase
 	def test_remove_marked_has_removed_set
 		entity = MiniTest::Mock.new
 		entity.expect(:equal?, true, [entity])
+		entity.expect(:is_a?, false, [Class])
+
+		@play_state.all_entities = [entity]
+		@play_state.death_mark(entity)
+		@play_state.send(:remove_marked)
+
+		assert(@play_state.has_removed)
+	end
+
+	def test_remove_marked_submarine
+		fake_player = MiniTest::Mock.new
+
+		@play_state.judge = MiniTest::Mock.new
+		@play_state.judge.expect(:died, nil, [fake_player])
+
+		entity = MiniTest::Mock.new
+		entity.expect(:equal?, true, [entity])
+		entity.expect(:is_a?, true, [Class])
+		entity.expect(:player, fake_player, [])
 
 		@play_state.all_entities = [entity]
 		@play_state.death_mark(entity)
@@ -251,6 +271,9 @@ class PlayStateTester < Test::Unit::TestCase
 		entity.expect(:draw, nil, [])
 		@play_state.all_entities = [entity]
 
+		@play_state.judge = MiniTest::Mock.new
+		@play_state.judge.expect(:game_over?, false, [])
+
 		@play_state.draw
 		
 		entity.verify
@@ -259,6 +282,9 @@ class PlayStateTester < Test::Unit::TestCase
 	def test_draw_background_is_drawn
 		setup_img_mock_draw_background
 
+		@play_state.judge = MiniTest::Mock.new
+		@play_state.judge.expect(:game_over?, false, [])
+
 		@play_state.draw
 
 		PlayState::img.verify
@@ -266,6 +292,9 @@ class PlayStateTester < Test::Unit::TestCase
 
 	def test_draw_background
 		setup_img_mock_draw_background
+
+		@play_state.judge = MiniTest::Mock.new
+		@play_state.judge.expect(:game_over?, false, [])
 
 		@play_state.draw
 
@@ -316,6 +345,90 @@ class PlayStateTester < Test::Unit::TestCase
 		fake_entity.verify
 	end
 
+	def test_draw_show_winner_called_when_game_over
+		setup_img_mock_draw_background
+
+		player = Player.new('Player1')
+		player.colour = 0xff_ff0000
+
+		@play_state.judge = MiniTest::Mock.new
+		@play_state.judge.expect(:game_over?, true, [])
+		@play_state.judge.expect(:winner, player, [])
+
+		@play_state.window = GameWindow.new
+
+		begin
+			@play_state.draw
+		rescue RuntimeError
+			# Font.draw in @play_state.win_msg will likely throw an exception 
+			# since there there is no rendering queue.
+		end
+
+		assert_not_nil(@play_state.win_msg)
+	end
+
+	def test_show_winner_nil_winner
+		@play_state.window = GameWindow.new
+
+		assert_equal(nil, @play_state.win_msg)
+
+		begin
+			@play_state.send(:show_winner, nil)
+		rescue RuntimeError
+			# Font.draw in @play_state.win_msg will likely throw an exception 
+			# since there there is no rendering queue.
+		end
+
+		oracle = "No one won."
+		assert_equal(oracle, @play_state.win_msg.text)
+	end
+
+	def test_show_winner_player_winner
+		@play_state.window = GameWindow.new
+
+		player = Player.new('Player1')
+
+		assert_equal(nil, @play_state.win_msg)
+
+		begin
+			@play_state.send(:show_winner, player)
+		rescue RuntimeError
+			# Font.draw in @play_state.win_msg will likely throw an exception 
+			# since there there is no rendering queue.
+		end
+
+		oracle = "The winner is Player1!"
+		assert_equal(oracle, @play_state.win_msg.text)
+	end
+
+	def test_show_winner_win_msg_already_set
+		@play_state.win_msg = MiniTest::Mock.new
+		@play_state.win_msg.expect(:draw, nil, [])
+		@play_state.win_msg.expect(:!, false, [])
+
+		@play_state.send(:show_winner, nil)
+
+		@play_state.win_msg.verify
+	end
+
+	def test_create_win_message_nil_winner
+		@play_state.window = GameWindow.new
+
+		oracle = "No one won."
+		resp = @play_state.send(:create_win_message, nil)
+		assert_equal(oracle, resp.text)
+	end
+
+	def test_create_win_message_player_winner
+		@play_state.window = GameWindow.new
+
+		player = Player.new('Player1')
+
+		oracle = "The winner is Player1!"
+		resp = @play_state.send(:create_win_message, player)
+		assert_equal(oracle, resp.text)
+	end
+
 
 private
 
@@ -324,6 +437,17 @@ private
 		PlayState::img.expect(:draw, nil, [Numeric, Numeric, Numeric])
 		PlayState::img.expect(:width, WIDTH/2, [])
 		PlayState::img.expect(:height, HEIGHT/2, [])
+	end
+
+	def mock_gosu
+		@old_gosu = Gosu
+		Object.send(:remove_const, :Gosu)
+		Object.const_set(:Gosu, MiniTest::Mock.new)
+	end
+
+	def restore_gosu
+		Object.send(:remove_const, :Gosu)
+		Object.const_set(:Gosu, @old_gosu)
 	end
 
 end

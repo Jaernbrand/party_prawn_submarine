@@ -2,6 +2,7 @@
 require 'gosu'
 
 require_relative '../game_states/play_state'
+require_relative '../judge'
 
 require_relative '../entities/submarine'
 require_relative '../entities/prawn'
@@ -22,12 +23,13 @@ class GameFactory
 	# Creates a new game to be played by the given players.
 	#
 	# * *Args*    :
+	#   - +GameWindow+ +window+ -> The GameWindow in which the game is played
 	#   - +Player+ +players+ -> The players of the game to be constructed
 	# * *Returns* :
 	#   - game to be played by the given players
 	# * *Return* *Type* :
 	#   - PlayState
-	def create_game(*players)
+	def create_game(window, *players)
 		play_state = PlayState.new
 
 		players.each do |curr_player|
@@ -46,7 +48,10 @@ class GameFactory
 		play_state.width = 1024
 		play_state.height = 768
 
+		play_state.window = window
+
 		play_state.controller = @controller_factory.create_controller(*players)
+		play_state.judge = Judge.new(*players)
 
 		play_state
 	end

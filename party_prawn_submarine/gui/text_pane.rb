@@ -4,6 +4,9 @@ require 'gosu'
 # Pane containing text.
 class TextPane
 
+	# The text contained in the TextPane
+	attr_accessor :text
+
 	# The colour of the text. Default is white.
 	attr_accessor :text_colour
 
@@ -18,6 +21,12 @@ class TextPane
 
 	# The z layer of the TextPane.
 	attr_accessor :z
+
+	# The width of the TextPane's background
+	attr_reader :bg_width
+
+	# The height of the TextPane's background
+	attr_reader :bg_height
 
 
 	# Initialises a new TextPane with the given arguments.

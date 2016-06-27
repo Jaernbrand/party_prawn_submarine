@@ -1,12 +1,22 @@
+
 require 'gosu'
+
+require_relative 'messages/message_dictionary'
+require_relative 'messages/english'
 
 class GameWindow < Gosu::Window
 
 	attr_accessor :state
 
+	# The MessageDictionary responsibled for user messages. Defaults to english
+	# messages.
+	attr_accessor :user_messages
+
 	def initialize(width=1024, height=768, fullscreen=false)
 		super
 		self.caption = 'Party Prawn Submarine'
+
+		@user_messages = MessageDictionary.new(English.messages)
 	end
 
 	def button_down(id)
@@ -27,9 +37,6 @@ class GameWindow < Gosu::Window
 
 	def draw
 		@state.draw
-		if @ent
-			@ent.draw(100, 100, 50)
-		end
 	end
 
 end
