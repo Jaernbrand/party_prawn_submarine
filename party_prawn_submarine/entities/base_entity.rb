@@ -1,6 +1,7 @@
 
 require 'gosu'
-require 'ostruct'
+
+require_relative '../point'
 
 # Abstract base class that contains logic common amoung the entities.
 class BaseEntity
@@ -253,7 +254,7 @@ private
 	# * *Return* *Type* :
 	#   - object
 	def create_corner(x, y, cos, sin, centre_x, centre_y)
-		corner = OpenStruct.new
+		corner = Point.new
 		x -= centre_x
 		y -= centre_y
 		corner.x = rotate_x(x, y, cos, sin) + centre_x
@@ -297,12 +298,12 @@ private
 	#   - +Array<object>+ +rect+ -> the rectangle to create axes from
 	#   - +Array<object>+ +axis+ -> array containing all axes
 	def create_axes(rect, axes)
-		axis1 = OpenStruct.new
+		axis1 = Point.new
 		axis1.x = (rect[0].x - rect[1].x).abs
 		axis1.y = (rect[0].y - rect[1].y).abs
 		axes.push(axis1)
 
-		axis2 = OpenStruct.new
+		axis2 = Point.new
 		axis2.x = (rect[0].x - rect[2].x).abs
 		axis2.y = (rect[0].y - rect[2].y).abs
 		axes.push(axis2)

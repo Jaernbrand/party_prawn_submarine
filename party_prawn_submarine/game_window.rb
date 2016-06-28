@@ -13,7 +13,7 @@ class GameWindow < Gosu::Window
 	attr_accessor :user_messages
 
 	def initialize(width=1024, height=768, fullscreen=false)
-		super
+		super(width, height, fullscreen)
 		self.caption = 'Party Prawn Submarine'
 
 		@user_messages = MessageDictionary.new(English.messages)
