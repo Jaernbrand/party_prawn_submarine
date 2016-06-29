@@ -115,6 +115,7 @@ class Submarine < BaseEntity
 
 		if !@moved_y_axis && !is_plane
 			stabilise
+			@has_moved = true
 		end
 
 		check_bounds
@@ -178,7 +179,15 @@ class Submarine < BaseEntity
 		end
 
 		update_y(@y_speed)
-		update_angle(calculate_angle(-@rotation_speed))
+		
+		rotation = (face_left?) ? @rotation_speed : -@rotation_speed
+		if (face_left? && @angle >= 270 - @rotation_speed) ||
+			(!face_left? && @angle <= 270 + @rotation_speed)
+			
+			update_angle(270)
+		else
+			update_angle(calculate_angle(rotation))
+		end
 
 		@has_moved = @player_moved = @moved_y_axis = true
 	end
@@ -191,7 +200,15 @@ class Submarine < BaseEntity
 		end
 
 		update_y(@y_speed)
-		update_angle(calculate_angle(@rotation_speed))
+
+		rotation = (face_left?) ? -@rotation_speed : @rotation_speed
+		if (face_left? && @angle <= 90 + @rotation_speed) ||
+			(!face_left? && @angle >= 90 - @rotation_speed)
+			
+			update_angle(90)
+		else
+			update_angle(calculate_angle(rotation))
+		end
 
 		@has_moved = @player_moved = @moved_y_axis = true
 	end

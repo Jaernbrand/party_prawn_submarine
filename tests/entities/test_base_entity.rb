@@ -47,7 +47,7 @@ class BaseEntityTester < Test::Unit::TestCase
 	end
 
 	def test_draw_angle_face_left
-		oracle = -20
+		oracle = 20
 		@entity.angle = 200
 		face_left = true
 		assert_equal(oracle, @entity.send(:draw_angle, face_left))

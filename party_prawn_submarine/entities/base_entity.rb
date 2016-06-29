@@ -69,7 +69,7 @@ protected
 	#   - Numeric
 	def draw_angle(face_left)
 		if face_left
-			180 - @angle
+			@angle - 180
 		else
 			@angle
 		end
