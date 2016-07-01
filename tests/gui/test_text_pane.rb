@@ -66,7 +66,7 @@ class TextPaneTester < Test::Unit::TestCase
 			@text_pane.font.expect(:draw, nil, [@text,
 									   			x+1, 
 												y+1, 
-												@z+1, 
+												@z, 
 												1, # scale_x
 												1, # scale_y
 												white])
