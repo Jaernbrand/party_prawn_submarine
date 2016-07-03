@@ -17,4 +17,16 @@ class Button
 		@label = Label.new(text, text_height, font_name, z)
 	end
 
+	# Checks if the button contains the x and y coordinates.
+	#
+	#   - +Numeric+ +x+ -> The x coordinate to check
+	#   - +Numeric+ +y+ -> The y coordinate to check
+	# * *Returns* :
+	#   - Whether the button contains the coordinates
+	# * *Return* *Type* :
+	#   - boolean
+	def contains(x, y)
+		@label.contains(x, y)
+	end
+
 end

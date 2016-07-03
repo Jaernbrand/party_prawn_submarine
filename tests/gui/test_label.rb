@@ -61,5 +61,17 @@ class LabelTester < Test::Unit::TestCase
 		end
 	end
 
+	def test_contains_coordinates_true
+		x = 2
+		y = 2
+		assert @button.contains(x, y)
+	end
+
+	def test_contains_coordinates_false
+		x = 300
+		y = 300
+		assert !@button.contains(x, y)
+	end
+
 end
 

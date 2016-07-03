@@ -30,8 +30,42 @@ class Label < TextComponent
 				  @text_colour)
 	end
 
+	# Checks if the label contains the given coordinates.
+	#
+	#   - +Numeric+ +x+ -> The x coordinate to check
+	#   - +Numeric+ +y+ -> The y coordinate to check
+	# * *Returns* :
+	#   - Whether the label contains the coordinates
+	# * *Return* *Type* :
+	#   - boolean
+	def contains(x, y)
+		contains_x(x) && contains_y(y)
+	end
+
 
 private
+
+	# Checks if the label contains the given x coordinate.
+	#
+	#   - +Numeric+ +x+ -> The x coordinate to check
+	# * *Returns* :
+	#   - Whether the label contains the x coordinate
+	# * *Return* *Type* :
+	#   - boolean
+	def contains_x(x)
+		@x <= x && x <= @bg_width
+	end
+
+	# Checks if the label contains the given y coordinate.
+	#
+	#   - +Numeric+ +y+ -> The y coordinate to check
+	# * *Returns* :
+	#   - Whether the label contains the y coordinate
+	# * *Return* *Type* :
+	#   - boolean
+	def contains_y(y)
+		@y <= y && y <= @bg_height
+	end
 
 	# Creates an Image with the supplied text.
 	#
