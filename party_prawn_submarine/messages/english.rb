@@ -10,7 +10,8 @@ module English
 	#   - Hash<Symbol, String>
 	def self.messages
 		{:winner => "The winner is %s!",
-   		:no_winner => "No one won."}
+   		:no_winner => "No one won.",
+		:exit => "Exit"}
 	end
 
 end
