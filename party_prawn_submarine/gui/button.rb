@@ -46,6 +46,7 @@ class Button
 
 	# Checks if the button contains the x and y coordinates.
 	#
+	# * *Args*    :
 	#   - +Numeric+ +x+ -> The x coordinate to check
 	#   - +Numeric+ +y+ -> The y coordinate to check
 	# * *Returns* :
@@ -65,6 +66,7 @@ class Button
 	#   - :held -> the button is continuously pressed
 	#   - :release -> the button is released
 	#
+	# * *Args*    :
 	#   - +Symbol+ +action+ -> Symbol representing a button action
 	#   - +callable+ +callable+ -> The callable to call
 	def add_callback(action, callable)
@@ -77,6 +79,7 @@ class Button
 	#   - :held -> the button is continuously pressed
 	#   - :release -> the button is released
 	#
+	# * *Args*    :
 	#   - +Symbol+ +action+ -> Symbol representing a button action
 	def remove_callback(action)
 		@callbacks.delete(action)
