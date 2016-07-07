@@ -11,7 +11,8 @@ module English
 	def self.messages
 		{:winner => "The winner is %s!",
    		:no_winner => "No one won.",
-		:exit => "Exit"}
+		:exit => "Exit",
+		:new_game => "New game"}
 	end
 
 end
