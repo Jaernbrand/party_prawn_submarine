@@ -105,5 +105,18 @@ class GameWindowTester < Test::Unit::TestCase
 		assert !@window.send(:max_skip_time_exceeded?)
 	end
 
+	def test_default_show_cursor
+		assert !@window.show_cursor
+	end
+
+	def test_needs_cursor
+		assert !@window.needs_cursor?
+	end
+
+	def test_needs_cursor
+		@window.show_cursor = true
+		assert @window.needs_cursor?
+	end
+
 end
 

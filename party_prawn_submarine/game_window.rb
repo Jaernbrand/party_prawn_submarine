@@ -16,6 +16,9 @@ class GameWindow < Gosu::Window
 	# messages.
 	attr_accessor :user_messages
 
+	# Boolean value whether to show the mouse cursor or not.
+	attr_accessor :show_cursor
+
 	# Initialises a new window with the given parameters.
 	def initialize(width=1024, height=768, fullscreen=false)
 		super(width, height, fullscreen)
@@ -24,6 +27,17 @@ class GameWindow < Gosu::Window
 		@user_messages = MessageDictionary.new(English.messages)
 
 		@last_redraw = Gosu::milliseconds
+		@show_cursor = false
+	end
+
+	# Returns whether the GameWindow needs the cursor to be shown.
+	#
+	# * *Returns* :
+	#   - if the mouse cursor needs to be shown
+	# * *Return* *Type* :
+	#   - boolean
+	def needs_cursor?
+		@show_cursor
 	end
 
 	# Tells the current game state that the button with the given id was 
