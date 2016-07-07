@@ -225,5 +225,27 @@ class ButtonTester < Test::Unit::TestCase
 		}
 	end
 
+	def test_default_x
+		oracle = 0
+		assert_equal(oracle, @button.x)
+	end
+
+	def test_default_y
+		oracle = 0
+		assert_equal(oracle, @button.y)
+	end
+
+	def test_set_x
+		value = 51
+		@button.x = value
+		assert_equal(value, @button.x)
+	end
+
+	def test_set_y
+		value = 51
+		@button.y = value
+		assert_equal(value, @button.y)
+	end
+
 end
 

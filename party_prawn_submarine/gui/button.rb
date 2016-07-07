@@ -23,6 +23,32 @@ class Button
 		@pressed_previously = false
 	end
 
+	# Gets the x value of the top left corner.
+	def x
+		@label.x
+	end
+
+	# Sets the x value of the top left corner.
+	#
+	# * *Args*    :
+	#   - +Numeric+ +x+ -> The new x value of the top left corner
+	def x=(value)
+		@label.x = value
+	end
+
+	# Gets the y value of the top left corner.
+	def y
+		@label.y
+	end
+
+	# Sets the y value of the top left corner.
+	#
+	# * *Args*    :
+	#   - +Numeric+ +x+ -> The new y value of the top left corner
+	def y=(value)
+		@label.y = value
+	end
+
 	# Draws the button in the current GameWindow.
 	def draw
 		@label.draw
