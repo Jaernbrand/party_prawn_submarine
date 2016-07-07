@@ -16,7 +16,7 @@ class Label < TextComponent
 	def initialize(text, text_height, font_name, z=0)
 		super(text, text_height, font_name, z)
 		@img = create_text_content(text, text_height, font_name)
-		@bg_width = img.width + 2
+		@bg_width = @img.width + 2
 	end
 
 	# Draws the Label to the current GameWindow.
@@ -53,7 +53,7 @@ private
 	# * *Return* *Type* :
 	#   - boolean
 	def contains_x(x)
-		@x <= x && x <= @bg_width
+		@x <= x && x <= (@x + @bg_width)
 	end
 
 	# Checks if the label contains the given y coordinate.
@@ -64,7 +64,7 @@ private
 	# * *Return* *Type* :
 	#   - boolean
 	def contains_y(y)
-		@y <= y && y <= @bg_height
+		@y <= y && y <= (@y + @bg_height)
 	end
 
 	# Creates an Image with the supplied text.
