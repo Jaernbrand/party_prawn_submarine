@@ -201,5 +201,29 @@ class ButtonTester < Test::Unit::TestCase
 		@button.label.verify
 	end
 
+	def test_mouse_over_no_callable
+		assert_nothing_raised {
+			@button.send(:mouse_over)
+		}
+	end
+
+	def test_down_no_callable
+		assert_nothing_raised {
+			@button.send(:down)
+		}
+	end
+
+	def test_held_no_callable
+		assert_nothing_raised {
+			@button.send(:held)
+		}
+	end
+
+	def test_release_no_callable
+		assert_nothing_raised {
+			@button.send(:release)
+		}
+	end
+
 end
 

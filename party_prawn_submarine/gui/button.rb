@@ -91,23 +91,32 @@ private
 	# Performs all actions to be done when the mouse pointer hovers over the
 	# Button. 
 	def mouse_over
-		callbacks[:mouse_over].call
+		call_existing(@callbacks, :mouse_over)
 	end
 
 	# Does everything to be done when the Button is pressed.
 	def down
-		callbacks[:down].call
+		call_existing(@callbacks, :down)
 	end
 
 	# Does everything that is to be done when the Button is held down.
 	def held
-		callbacks[:held].call
+		call_existing(@callbacks, :held)
 	end
 
 	# Performs all actions that needs to be taken when the Button is releasd
 	# after being pressed.
 	def release
-		callbacks[:release].call
+		call_existing(@callbacks, :release)
+	end
+
+	# Calls the value corresponding to the given key, if a value exists.
+	#
+	# * *Args*    :
+	#   - <tt>Hash<object, callable></tt> +hash+ -> The Hash to get the value from
+	#   - +object+ +key+ -> The key of the callable to call
+	def call_existing(hash, key)
+		hash[key].call if hash.key?(key)
 	end
 
 end
