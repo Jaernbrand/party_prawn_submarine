@@ -20,11 +20,15 @@ class GameWindow < Gosu::Window
 	attr_accessor :show_cursor
 
 	# Initialises a new window with the given parameters.
-	def initialize(width=1024, height=768, fullscreen=false)
+	def initialize(width=1024, 
+				   height=768, 
+				   fullscreen=false, 
+				   user_messages = MessageDictionary.new(English.messages))
+
 		super(width, height, fullscreen)
 		self.caption = 'Party Prawn Submarine'
 
-		@user_messages = MessageDictionary.new(English.messages)
+		@user_messages = user_messages
 
 		@last_redraw = Gosu::milliseconds
 		@show_cursor = false
