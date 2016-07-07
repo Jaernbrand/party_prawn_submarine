@@ -109,11 +109,11 @@ class GameWindowTester < Test::Unit::TestCase
 		assert !@window.show_cursor
 	end
 
-	def test_needs_cursor
+	def test_needs_cursor_default
 		assert !@window.needs_cursor?
 	end
 
-	def test_needs_cursor
+	def test_needs_cursor_set_true
 		@window.show_cursor = true
 		assert @window.needs_cursor?
 	end
