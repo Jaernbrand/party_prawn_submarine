@@ -32,6 +32,14 @@ class ButtonTester < Test::Unit::TestCase
 		assert @button.contains(x, y)
 	end
 
+	def test_contains_coordinates_true_non_default_coordinate
+		@button.x = 500
+		@button.y = 500
+		x = 502
+		y = 502
+		assert @button.contains(x, y)
+	end
+
 	def test_contains_coordinates_false
 		x = 300
 		y = 300
@@ -245,6 +253,46 @@ class ButtonTester < Test::Unit::TestCase
 		value = 51
 		@button.y = value
 		assert_equal(value, @button.y)
+	end
+
+	def test_mouse_over_pressed_gets_set
+		callable = MiniTest::Mock.new
+		callable.expect(:call, nil, [])
+
+		@button.add_callback(:mouse_over, callable)
+		@button.send(:mouse_over)
+
+		assert !@button.pressed_previously
+	end
+
+	def test_down_pressed_gets_set
+		callable = MiniTest::Mock.new
+		callable.expect(:call, nil, [])
+
+		@button.add_callback(:down, callable)
+		@button.send(:down)
+
+		assert @button.pressed_previously
+	end
+
+	def test_held_gets_set
+		callable = MiniTest::Mock.new
+		callable.expect(:call, nil, [])
+
+		@button.add_callback(:held, callable)
+		@button.send(:held)
+
+		assert @button.pressed_previously
+	end
+
+	def test_release_gets_set
+		callable = MiniTest::Mock.new
+		callable.expect(:call, nil, [])
+
+		@button.add_callback(:release, callable)
+		@button.send(:release)
+
+		assert !@button.pressed_previously
 	end
 
 end

@@ -118,22 +118,26 @@ private
 	# Button. 
 	def mouse_over
 		call_existing(@callbacks, :mouse_over)
+		@pressed_previously = false
 	end
 
 	# Does everything to be done when the Button is pressed.
 	def down
 		call_existing(@callbacks, :down)
+		@pressed_previously = true
 	end
 
 	# Does everything that is to be done when the Button is held down.
 	def held
 		call_existing(@callbacks, :held)
+		@pressed_previously = true
 	end
 
 	# Performs all actions that needs to be taken when the Button is releasd
 	# after being pressed.
 	def release
 		call_existing(@callbacks, :release)
+		@pressed_previously = false
 	end
 
 	# Calls the value corresponding to the given key, if a value exists.
