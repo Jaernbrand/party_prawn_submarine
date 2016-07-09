@@ -18,4 +18,7 @@ module Constants
 	# The name of the font to use for text
 	FONT_NAME = Gosu::default_font_name
 
+	# The text height of the buttons
+	BT_TEXT_HEIGHT = 30
+
 end
