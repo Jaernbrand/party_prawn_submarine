@@ -35,22 +35,9 @@ class MainMenuTester < Test::Unit::TestCase
 		@main_menu.current_menu.verify
 	end
 
-	def test_create_root_menu
-		root = @main_menu.send(:create_root_menu)
-		assert(root.is_a? Menu)
-	end
-
-	def test_create_exit_button
-		root = @main_menu.send(:create_exit_button, 0, 0)
-		assert(root.is_a? Button)
-	end
-
-	def test_create_new_game_button
-		new_game = @main_menu.send(:create_new_game_button, 
-								   MiniTest::Mock.new, 
-								   0, 
-								   0)
-		assert(new_game.is_a? Button)
+	def test_root_menu_is_created
+		root = @main_menu.current_menu
+		assert(root.is_a? RootMenu)
 	end
 
 	def test_button_up
@@ -85,6 +72,12 @@ class MainMenuTester < Test::Unit::TestCase
 		assert_nothing_raised do
 			@main_menu.button_down(key_id)
 		end
+	end
+
+	def test_current_menu_accessors
+		old_root = @main_menu.current_menu
+		@main_menu.current_menu = RootMenu.new(@main_menu)
+		assert_not_same(old_root, @main_menu.current_menu)
 	end
 
 end

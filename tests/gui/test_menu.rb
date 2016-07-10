@@ -10,7 +10,7 @@ class MenuTester < Test::Unit::TestCase
 
 	def setup
 		@fake_window = MiniTest::Mock.new
-		@menu = Menu.new(@fake_window, 0, 0)
+		@menu = Menu.new(@fake_window)
 	end
 
 	def test_draw

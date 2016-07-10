@@ -10,17 +10,11 @@ class Menu
 	# The GameWindow which the Menu is associated with.
 	attr_accessor :window
 
-	# Creates a new Menu associated with the given GameWindow and with the
-	# top left corner at the given coordinate.
+	# Creates a new Menu associated with the given GameWindow.
 	#
 	# * *Args*    :
 	#   - +GameWindow+ +window+ -> The associated window
-	#   - +Numeric+ +x+ -> The x value of the top left corner
-	#   - +Numeric+ +y+ -> The y value of the top right corner
-	def initialize(window, x, y)
-		@x = x
-		@y = y
-
+	def initialize(window)
 		@window = window
 
 		@components = []
