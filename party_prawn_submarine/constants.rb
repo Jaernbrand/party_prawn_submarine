@@ -24,4 +24,7 @@ module Constants
 	# The standard text height
 	TEXT_HEIGHT = 30
 
+	# The maximum number of players.
+	MAX_PLAYERS = 4
+
 end
