@@ -12,7 +12,9 @@ module English
 		{:winner => "The winner is %s!",
    		:no_winner => "No one won.",
 		:exit => "Exit",
-		:new_game => "New game"}
+		:new_game => "New game",
+		:back => "Back",
+		:start => "Start"}
 	end
 
 end
