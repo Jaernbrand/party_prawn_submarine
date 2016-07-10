@@ -21,4 +21,7 @@ module Constants
 	# The text height of the buttons
 	BT_TEXT_HEIGHT = 30
 
+	# The standard text height
+	TEXT_HEIGHT = 30
+
 end
