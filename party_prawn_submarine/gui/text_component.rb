@@ -61,6 +61,10 @@ class TextComponent
 		@bg_height = text_height + 2
 	end
 
+	# Update the state of the TextComponent.
+	def update
+		# Left empty intentionally.
+	end
 
 protected
 

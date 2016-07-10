@@ -49,6 +49,10 @@ class TextPaneTester < Test::Unit::TestCase
 		assert_equal(oracle, @text_pane.font.height)
 	end
 
+	def test_update
+		assert_nothing_raised { @text_pane.update }
+	end
+
 	def test_draw
 		white = Gosu::Color::WHITE
 		black = Gosu::Color::BLACK

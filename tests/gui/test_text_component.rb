@@ -63,6 +63,10 @@ class TextComponentTester < Test::Unit::TestCase
 		assert_equal(oracle, @comp.bg_height)
 	end
 
+	def test_update
+		assert_nothing_raised { @comp.update }
+	end
+
 	def test_draw_background
 		bg_width = 18
 		@comp.bg_width = bg_width
