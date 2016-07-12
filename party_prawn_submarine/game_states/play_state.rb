@@ -263,11 +263,11 @@ private
 		else
 			msg = @window.user_messages.message(:no_winner)
 		end
-		text_pane = TextPane.new(msg, MSG_HEIGHT, Constants::FONT_NAME, MSG_Z)
-		text_pane.x = @width/2 - text_pane.bg_width/2
-		text_pane.y = @height/2 - text_pane.bg_height/2
+		win_label = Label.new(msg, MSG_HEIGHT, Constants::FONT_NAME, MSG_Z)
+		win_label.x = @width/2 - win_label.bg_width/2
+		win_label.y = @height/2 - win_label.bg_height/2
 
-		text_pane
+		win_label
 	end
 
 end
