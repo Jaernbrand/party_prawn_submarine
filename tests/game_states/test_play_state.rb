@@ -5,8 +5,11 @@ require 'minitest/mock'
 require 'game_states/play_state'
 
 require_relative 'play_state_extension'
+require_relative '../gosu_mocker'
 
 class PlayStateTester < Test::Unit::TestCase
+
+	include GosuMocker
 
 	WIDTH = 320
 	HEIGHT = 240
@@ -437,17 +440,6 @@ private
 		PlayState::img.expect(:draw, nil, [Numeric, Numeric, Numeric])
 		PlayState::img.expect(:width, WIDTH/2, [])
 		PlayState::img.expect(:height, HEIGHT/2, [])
-	end
-
-	def mock_gosu
-		@old_gosu = Gosu
-		Object.send(:remove_const, :Gosu)
-		Object.const_set(:Gosu, MiniTest::Mock.new)
-	end
-
-	def restore_gosu
-		Object.send(:remove_const, :Gosu)
-		Object.const_set(:Gosu, @old_gosu)
 	end
 
 end
