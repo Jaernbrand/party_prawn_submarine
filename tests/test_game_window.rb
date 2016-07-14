@@ -118,5 +118,51 @@ class GameWindowTester < Test::Unit::TestCase
 		assert @window.needs_cursor?
 	end
 
+	def test_text_input_writer_nil_argument_assigned_non_nil_previously
+		arg = Gosu::TextInput.new
+		@window.text_input = arg
+
+		@window.text_input = nil
+
+		assert_equal(arg, @window.text_input)
+	end
+
+	def test_text_input_writer_nil_argument
+		@window.text_input = Gosu::TextInput.new
+		@window.send(:clear_text_input_assign)
+
+		arg = nil
+		@window.text_input = arg
+
+		assert_equal(nil, @window.text_input)
+	end
+
+	def test_text_input_writer_nonnil_argument
+		arg = Gosu::TextInput.new
+		@window.text_input = arg
+		assert(arg.equal?(@window.text_input))
+	end
+
+	def test_clear_text_input_assign_non_nil_value
+		@window.last_assigned_ti = Gosu::TextInput.new
+		@window.send(:clear_text_input_assign)
+		assert_equal(nil, @window.last_assigned_ti)
+	end
+
+	def test_clear_text_input_assign_nil_value
+		@window.send(:clear_text_input_assign)
+		assert_equal(nil, @window.last_assigned_ti)
+	end
+
+	def test_update_text_input_assign_history_reset
+		@window.state = MiniTest::Mock.new
+		@window.state.expect(:update, nil, [])
+
+		@window.text_input = Gosu::TextInput.new
+		@window.update
+
+		assert_equal(nil, @window.last_assigned_ti)
+	end
+
 end
 

@@ -7,6 +7,7 @@ require_relative 'messages/english'
 # Window containing the game state. Also initialises Gosu.
 class GameWindow < Gosu::Window
 
+	# The maximum amount of time to skip redrawing In milliseconds.
 	MAX_SKIP_TIME = 2000
 
 	# The current game state of the window
@@ -32,6 +33,24 @@ class GameWindow < Gosu::Window
 
 		@last_redraw = Gosu::milliseconds
 		@show_cursor = false
+
+		@last_assigned_ti = nil
+	end
+
+	# Assigns the given value to the text_input attribute. Set to nil for
+	# Gosu's default handling of keyboard events 
+	# ({see Gosu's documentation}[https://www.libgosu.org/rdoc/_index.html]).
+	# However, the given value (including nil) will not be assigned to 
+	# text_input if it previously was assigned a non-nil value. The assignment 
+	# history is reset once every update tick.
+	#
+	# * *Args*    :
+	#   - +TextInput+ +value+ -> The value to assign to text_input
+	def text_input=(value)
+		if @last_assigned_ti == nil
+			super(value)
+			@last_assigned_ti = value
+		end
 	end
 
 	# Returns whether the GameWindow needs the cursor to be shown.
@@ -65,6 +84,7 @@ class GameWindow < Gosu::Window
 	# Updates the state of the window.
 	def update
 		@state.update
+		clear_text_input_assign
 	end
 
 	# Checks if the window needs to be redrawn.
@@ -85,6 +105,11 @@ class GameWindow < Gosu::Window
 
 
 private
+
+	# Clears the attribute holding the last value to be assigned to #text_input.
+	def clear_text_input_assign
+		@last_assigned_ti = nil if @last_assigned_ti != nil
+	end
 
 	# Checks if the maximum time to skip drawing has been exeeded. 
 	#
