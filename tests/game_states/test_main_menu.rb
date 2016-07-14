@@ -40,44 +40,49 @@ class MainMenuTester < Test::Unit::TestCase
 		assert(root.is_a? RootMenu)
 	end
 
-	def test_button_up
-		@main_menu.controller = MiniTest::Mock.new
-		@main_menu.controller.expect(:button_up, nil, [Numeric])
-
-		key_id = 50
-		@main_menu.button_up(key_id)
-
-		@main_menu.controller.verify
-	end
-
-	def test_button_down
-		@main_menu.controller = MiniTest::Mock.new
-		@main_menu.controller.expect(:button_down, nil, [Numeric])
-
-		key_id = 50
-		@main_menu.button_down(key_id)
-
-		@main_menu.controller.verify
-	end
-
-	def test_button_up_nil_controller
-		key_id = 50
-		assert_nothing_raised do
-			@main_menu.button_up(key_id)
-		end
-	end
-
-	def test_button_down_nil_controller
-		key_id = 50
-		assert_nothing_raised do
-			@main_menu.button_down(key_id)
-		end
-	end
-
 	def test_current_menu_accessors
 		old_root = @main_menu.current_menu
 		@main_menu.current_menu = RootMenu.new(@main_menu)
 		assert_not_same(old_root, @main_menu.current_menu)
+	end
+
+	def test_button_down
+		id = 50
+
+		@main_menu.controller = MiniTest::Mock.new
+		@main_menu.controller.expect(:button_down, nil, [id])
+
+		@main_menu.button_down(id)
+
+		@main_menu.controller.verify
+	end
+
+	def test_buttoon_up
+		id = 50
+
+		@main_menu.controller = MiniTest::Mock.new
+		@main_menu.controller.expect(:button_up, nil, [id])
+
+		@main_menu.button_up(id)
+
+		@main_menu.controller.verify
+	end
+
+	def test_update_controller_called
+		@main_menu.controller = MiniTest::Mock.new
+		@main_menu.controller.expect(:buttons_pressed_down, nil, [])
+
+		@main_menu.update
+
+		@main_menu.controller.verify
+	end
+
+	def test_update_controller_is_nil
+		@main_menu.controller = nil
+
+		assert_nothing_raised do 
+			@main_menu.update
+		end
 	end
 
 end

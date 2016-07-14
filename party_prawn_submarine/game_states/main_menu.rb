@@ -4,25 +4,16 @@ require_relative '../constants'
 require_relative '../menus/main_menu/root_menu'
 require_relative '../gui/button'
 
-# The main menu of the game.
-class MainMenu
+require_relative 'base_state'
+
+# The main menu of the game. Presents an interface for the user to create and 
+# start new games.
+class MainMenu < BaseState
 
 	# The text height of the MainMenu's buttons.
 	BT_TEXT_HEIGHT = 20
 
-	# The width of the MainMenu
-	attr_accessor :width
-	
-	# The height of the MainMenu
-	attr_accessor :height
-
-	# The GameWindow that the current MainMenu is associated with
-	attr_accessor :window
-
-	# Handles button events in the MainMenu.
-	attr_accessor :controller
-
-	# The currently shown submenu in the main menu
+	# The currently shown submenu in the main menu.
 	attr_accessor :current_menu
 
 	# Initialises a new MainMenu associated to the given GameWindow.
@@ -38,22 +29,12 @@ class MainMenu
 		@controller = nil
 	end
 
-	# Tells the #controller that the button with the given id was pressed.
+	# Return whether the MainMenu needs to be redrawn in the GameWindow.
 	#
-	# * *Args*    :
-	#   - +Fixnum+ +id+ -> The ID of the button being pressed
-	def button_down(id)
-		@controller.button_down(id) if @controller
-	end
-
-	# Tells the #controller that the button with the given id was released.
-	#
-	# * *Args*    :
-	#   - +Fixnum+ +id+ -> The ID of the button that was released
-	def button_up(id)
-		@controller.button_up(id) if @controller
-	end
-
+	# * *Returns* :
+	#   - +true+ if the MainMenu needs to be redrawn
+	# * *Return* *Type* :
+	#   - boolean
 	def needs_redraw?
 		true # TODO
 	end
@@ -65,6 +46,7 @@ class MainMenu
 
 	# Updates the state of the MainMenu.
 	def update
+		super
 		@current_menu.update
 	end
 

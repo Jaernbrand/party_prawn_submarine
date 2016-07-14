@@ -5,11 +5,8 @@ require 'minitest/mock'
 require 'game_states/play_state'
 
 require_relative 'play_state_extension'
-require_relative '../gosu_mocker'
 
 class PlayStateTester < Test::Unit::TestCase
-
-	include GosuMocker
 
 	WIDTH = 320
 	HEIGHT = 240

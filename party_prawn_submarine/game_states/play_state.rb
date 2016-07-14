@@ -2,15 +2,15 @@
 require_relative '../constants'
 require_relative '../gui/text_pane'
 
+require_relative 'base_state'
+
 # The state in which the game is played. Contains the entities needed to play 
 # the game as well as scene information such as board bounds.
-class PlayState
+class PlayState < BaseState
 
+	# The path to the PlayState's background image.
 	BACKGROUND_IMAGE_PATH = Constants::IMAGE_PATH + "water.png"
 
-	# The z layer of teh background. Used by the #draw method.
-	BACKGROUND_Z = 0
-	
 	# The z layer of messages shown to the user.
 	MSG_Z = 1000
 
@@ -18,20 +18,8 @@ class PlayState
 	# in pixels.
 	MSG_HEIGHT = 50
 
-	# Handles button events in the PlayState.
-	attr_accessor :controller
-
-	# The width of the PlayState
-	attr_accessor :width
-	
-	# The height of the PlayState
-	attr_accessor :height
-
 	# The judge that decides the winner
 	attr_accessor :judge
-
-	# The GameWindow that the current PlayState is associated with
-	attr_accessor :window
 
 	# Initialises a new PlayState.
 	def initialize(entities = [])
@@ -50,25 +38,9 @@ class PlayState
 		@@img = Gosu::Image.new(window, BACKGROUND_IMAGE_PATH, false)
 	end
 
-	# Tells the #controller that the button with the given id was pressed.
-	#
-	# * *Args*    :
-	#   - +Fixnum+ +id+ -> The ID of the button being pressed
-	def button_down(id)
-		@controller.button_down(id) if @controller
-	end
-
-	# Tells the #controller that the button with the given id was released.
-	#
-	# * *Args*    :
-	#   - +Fixnum+ +id+ -> The ID of the button that was released
-	def button_up(id)
-		@controller.button_up(id) if @controller
-	end
-
 	# Updates the PlayState and all entities it contains.
 	def update
-		@controller.buttons_pressed_down
+		super
 		@all_entities.each do |entity|
 			entity.update
 		end
@@ -221,20 +193,6 @@ private
 	#   - boolean
 	def outside_y_bounds?(y, h)
 		y + h < 0 || y > @height
-	end
-
-	# Draws the background of the PlayState.
-	def draw_background
-		x = y = 0
-		begin
-			@@img.draw(x, y, BACKGROUND_Z)
-
-			x += @@img.width
-			if x > @width
-				x = 0
-				y += @@img.height
-			end
-		end until y > @height
 	end
 
 	# Draws the name of the winner on screen.
