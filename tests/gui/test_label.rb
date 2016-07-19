@@ -73,5 +73,10 @@ class LabelTester < Test::Unit::TestCase
 		assert !@label.contains(x, y)
 	end
 
+	def test_default_bg_margin
+		oracle = 2
+		assert_equal(oracle, Label::bg_margin)
+	end
+
 end
 

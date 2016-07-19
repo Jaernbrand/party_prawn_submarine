@@ -6,6 +6,8 @@ require_relative 'text_component'
 # Label containing static text.
 class Label < TextComponent
 
+	@@bg_margin = 2
+
 	# Creates a new Label with the given text.
 	#
 	# * *Args*    :
@@ -16,7 +18,14 @@ class Label < TextComponent
 	def initialize(text, text_height, font_name, z=0)
 		super(text, text_height, font_name, z)
 		@img = create_text_content(text, text_height, font_name)
-		@bg_width = @img.width + 2
+		@bg_width = @img.width + @@bg_margin
+	end
+
+	# Returns the background margin for the Label. The background margin is the 
+	# margin between the label text and the Label's edge. The margin is 
+	# measured in pixels.
+	def self.bg_margin
+		@@bg_margin
 	end
 
 	# Draws the Label to the current GameWindow.
