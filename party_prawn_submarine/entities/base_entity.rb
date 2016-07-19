@@ -292,7 +292,7 @@ private
 		cos * y - sin * x
 	end
 
-	# Creates the axes of the given rectanlge and pushes them to the axes array.
+	# Creates the axes of the given rectangle and pushes them to the axes array.
 	#
 	# * *Args*    :
 	#   - +Array<object>+ +rect+ -> the rectangle to create axes from
