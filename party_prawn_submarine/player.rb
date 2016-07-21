@@ -24,7 +24,7 @@ class Player
 	#
 	# * *Args*    :
 	#   - +String+ +name+ -> the name of the player
-	#   - +Hash<Symbol, Numeric>+ +controls+ -> the player controls
+	#   - <tt>Hash<Symbol, Numeric></tt> +controls+ -> the player controls
 	def initialize(name, controls={})
 		@name = name
 		@controls = controls
