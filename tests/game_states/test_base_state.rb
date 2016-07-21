@@ -4,8 +4,6 @@ require 'minitest/mock'
 
 require 'game_states/base_state'
 
-require_relative 'base_state_extension'
-
 class BaseStateTester < Test::Unit::TestCase
 
 	WIDTH = 320
@@ -18,14 +16,14 @@ class BaseStateTester < Test::Unit::TestCase
 	end
 
 	def test_draw_background
-		BaseState::img = MiniTest::Mock.new
-		BaseState::img.expect(:draw, nil, [Numeric, Numeric, Numeric])
-		BaseState::img.expect(:width, WIDTH/2, [])
-		BaseState::img.expect(:height, HEIGHT/2, [])
+		img = MiniTest::Mock.new
+		img.expect(:draw, nil, [Numeric, Numeric, Numeric])
+		img.expect(:width, WIDTH/2, [])
+		img.expect(:height, HEIGHT/2, [])
 
-		@base_state.send(:draw_background)
+		@base_state.send(:draw_background, img)
 
-		BaseState::img.verify
+		img.verify
 	end
 	
 	def test_update_controller_is_nil

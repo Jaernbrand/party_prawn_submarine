@@ -78,7 +78,7 @@ class PlayState < BaseState
 	# Draws the background of the PlayState and all of the PlayState's
 	# entities.
 	def draw
-		draw_background
+		draw_background(@@img)
 		@all_entities.each do |entity|
 			entity.draw
 		end

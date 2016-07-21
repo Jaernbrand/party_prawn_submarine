@@ -46,15 +46,18 @@ protected
 
 	# Draws the background of the BaseState. The background image will be drawn
 	# multiple times side by side if the image is smaller than the BaseState.
-	def draw_background
+	#
+	# * *Args*    :
+	#   - <tt>Gosu::Image</tt> +img+ -> The background image
+	def draw_background(img)
 		x = y = 0
 		begin
-			@@img.draw(x, y, BACKGROUND_Z)
+			img.draw(x, y, BACKGROUND_Z)
 
-			x += @@img.width
+			x += img.width
 			if x > @width
 				x = 0
-				y += @@img.height
+				y += img.height
 			end
 		end until y > @height
 	end
