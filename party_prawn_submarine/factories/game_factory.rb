@@ -36,13 +36,14 @@ class GameFactory
 	#
 	# * *Args*    :
 	#   - +GameWindow+ +window+ -> The GameWindow in which the game is played
+	#   - +callable+ +game_over_callable+ -> The game over callable to give the PlayState
 	#   - +Player+ +players+ -> The players of the game to be constructed
 	# * *Returns* :
 	#   - game to be played by the given players
 	# * *Return* *Type* :
 	#   - PlayState
-	def create_game(window, *players)
-		play_state = PlayState.new
+	def create_game(window, game_over_callable, *players)
+		play_state = PlayState.new(game_over_callable)
 
 		@pos_idx = 0
 

@@ -16,13 +16,17 @@ class GameFactoryTester < Test::Unit::TestCase
 		fake_player = MiniTest::Mock.new
 		fake_window = MiniTest::Mock.new
 
+		fake_game_over = MiniTest::Mock.new
+
 		fake_player.expect(:submarine=, nil, [Submarine])
 		fake_player.expect(:party_horn=, nil, [PartyHorn])
 		fake_player.expect(:hash, 10, [])
 
 		@fake_ctrl_fac.expect(:create_controller, fake_ctrl, [fake_player])
 
-		play_state = @game_factory.create_game(fake_window, fake_player)
+		play_state = @game_factory.create_game(fake_window, 
+											   fake_game_over, 
+											   fake_player)
 
 		@fake_ctrl_fac.verify
 		assert(play_state.instance_of? PlayState)
