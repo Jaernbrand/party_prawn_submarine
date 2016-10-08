@@ -2,6 +2,8 @@
 require 'test/unit'
 require 'minitest/mock'
 
+require 'gosu'
+
 require 'stringio'
 
 require 'messages/message_dictionary'
@@ -11,7 +13,8 @@ class MessageDictionaryTester < Test::Unit::TestCase
 
 	def setup
 		@eng = English::messages
-		@msg_dic = MessageDictionary.new(@eng)
+		@keys = English::keynames
+		@msg_dic = MessageDictionary.new(@eng, @keys)
 	end
 
 	def test_get_no_winner_message
@@ -61,6 +64,15 @@ class MessageDictionaryTester < Test::Unit::TestCase
 		oracle = sprintf(@eng[sym], name)
 		ret = @msg_dic.message(sym, name)
 
+		assert_equal(oracle, ret)
+	end
+
+	def test_get_space_key
+		key = Gosu::KbSpace
+
+		ret = @msg_dic.keyname(key)
+		
+		oracle = "Space"
 		assert_equal(oracle, ret)
 	end
 

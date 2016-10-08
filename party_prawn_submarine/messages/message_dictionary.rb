@@ -3,12 +3,15 @@
 # request.
 class MessageDictionary
 
-	# Initialises a new MessageDictionary with the given language dictionary.
+	# Initialises a new MessageDictionary with the given language dictionary 
+	# and the given keynames dictionary.
 	#
 	# * *Args*    :
 	#   - <tt>Hash<Symbol, String></tt> +language+ -> The language table to use
-	def initialize(language)
+	#   - <tt>Hash<Fixnum, String></tt> +keynames+ -> The keynames table to use
+	def initialize(language, keynames)
 		@messages = language
+		@keynames = keynames
 	end
 
 	# Gets the message corresponding to the given message symbol. Some messages
@@ -23,6 +26,18 @@ class MessageDictionary
 	#   - String
 	def message(msg, *args)
 		sprintf(@messages[msg], *args)
+	end
+
+	# Returns the string representation of the given gosu key constant.
+	#
+	# * *Args*    :
+	#   - +Fixnum+ +key+ -> The gosu key constant to get the string representation for
+	# * *Returns* :
+	#   - The key as a string
+	# * *Return* *Type* :
+	#   - String
+	def keyname(key)
+		@keynames[key]
 	end
 
 end
