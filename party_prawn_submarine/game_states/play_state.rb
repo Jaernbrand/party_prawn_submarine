@@ -21,13 +21,26 @@ class PlayState < BaseState
 	# The judge that decides the winner
 	attr_accessor :judge
 
-	# Initialises a new PlayState.
-	def initialize(entities = [])
+	# Initialises a new PlayState. The given callble have to implement the 
+	# method +call+ with arity 0. The game_over_callable will be called when 
+	# it's game over and the correct key is pressed.
+	#
+	# * *Args*    :
+	#   - +callable+ +game_over_callable+ -> The callable to be called when the game is over
+	#   - <tt>Array<BaseEntity></tt> +entities+ -> The starting entities of the PlayState 
+	def initialize(game_over_callable, entities = [])
 		@all_entities = entities
 		@rm_marked = []
 		@has_removed = false
 
+		@game_over_return_key = Gosu::KbSpace
+		@game_over_callable = game_over_callable
+		@game_over_is_ready = false
+
+		@game_over_prompt = nil
+
 		@win_msg = nil
+		@judge = nil
 	end
 
 	# Preloads the assets needed by the PlayState.
@@ -46,6 +59,11 @@ class PlayState < BaseState
 		end
 		detect_collisions
 		remove_marked
+
+		if @judge.game_over? && !@game_over_is_ready
+			game_over_init
+			@game_over_is_ready = true
+		end
 	end
 
 	# Markes the given entity to be removed from the PlayState.
@@ -83,8 +101,9 @@ class PlayState < BaseState
 			entity.draw
 		end
 
-		if judge.game_over?
-			show_winner(judge.winner)
+		if @judge.game_over?
+			show_winner(@judge.winner)
+			@game_over_prompt.draw
 		end
 	end
 
@@ -159,7 +178,7 @@ protected
 			remove_entity(curr_marked)
 
 			if (curr_marked.is_a? Submarine)
-				judge.died(curr_marked.player)
+				@judge.died(curr_marked.player)
 			end
 
 			i -= 1
@@ -226,6 +245,30 @@ private
 		win_label.y = @height/2 - win_label.bg_height/2
 
 		win_label
+	end
+
+	# Initialises the game over state.
+	def game_over_init
+		@controller.add_button_down_callback(@game_over_return_key, 
+											 @game_over_callable)
+		@game_over_prompt = create_game_over_prompt
+	end
+
+	# Creates a messge with a prompt for the user.
+	#
+	# * *Returns* :
+	#   - The prompt as a TextPane
+	# * *Return* *Type* :
+	#   - TextPane
+	def create_game_over_prompt
+		keyname = @window.user_messages.keyname(@game_over_return_key)
+		msg = @window.user_messages.message(:game_over_prompt, keyname)
+
+		prompt_label = Label.new(msg, MSG_HEIGHT, Constants::FONT_NAME, MSG_Z)
+		prompt_label.x = @width/2 - prompt_label.bg_width/2
+		prompt_label.y = @height/2 - prompt_label.bg_height/2 + MSG_HEIGHT
+
+		prompt_label
 	end
 
 end

@@ -3,6 +3,7 @@ require 'test/unit'
 require 'minitest/mock'
 
 require 'game_states/play_state'
+require 'player'
 
 require_relative 'play_state_extension'
 
@@ -12,7 +13,7 @@ class PlayStateTester < Test::Unit::TestCase
 	HEIGHT = 240
 
 	def setup
-		@play_state = PlayState.new
+		@play_state = PlayState.new(MiniTest::Mock.new)
 		@play_state.width = WIDTH
 		@play_state.height = HEIGHT
 	end
@@ -125,6 +126,9 @@ class PlayStateTester < Test::Unit::TestCase
 		@play_state.controller = MiniTest::Mock.new
 		@play_state.controller.expect(:buttons_pressed_down, nil, [])
 
+		@play_state.judge = MiniTest::Mock.new
+		@play_state.judge.expect(:game_over?, false, [])
+
 		entity = MiniTest::Mock.new
 		entity.expect(:update, nil, [])
 		entity.expect(:game_state=, nil, [@play_state])
@@ -139,6 +143,9 @@ class PlayStateTester < Test::Unit::TestCase
 	def test_update_multiple_entities
 		@play_state.controller = MiniTest::Mock.new
 		@play_state.controller.expect(:buttons_pressed_down, nil, [])
+
+		@play_state.judge = MiniTest::Mock.new
+		@play_state.judge.expect(:game_over?, false, [])
 
 		entities = []
 
@@ -162,9 +169,109 @@ class PlayStateTester < Test::Unit::TestCase
 		@play_state.controller = MiniTest::Mock.new
 		@play_state.controller.expect(:buttons_pressed_down, nil, [])
 
+		@play_state.judge = MiniTest::Mock.new
+		@play_state.judge.expect(:game_over?, false, [])
+
 		@play_state.update
 
 		@play_state.controller.verify
+	end
+
+	def test_update_game_over_game_over_prompt_is_set
+		pair = [Gosu::KbSpace, Object]
+
+		@play_state.controller = MiniTest::Mock.new
+		@play_state.controller.expect(:buttons_pressed_down, nil, [])
+		@play_state.controller.expect(:add_button_down_callback, nil, pair)
+
+		@play_state.judge = MiniTest::Mock.new
+		@play_state.judge.expect(:game_over?, true, [])
+
+		@play_state.window = GameWindow.new
+
+		@play_state.update
+
+		assert_not_nil @play_state.game_over_prompt
+	end
+
+	def test_update_game_over_boolean_changed
+		pair = [Gosu::KbSpace, Object]
+
+		@play_state.controller = MiniTest::Mock.new
+		@play_state.controller.expect(:buttons_pressed_down, nil, [])
+		@play_state.controller.expect(:add_button_down_callback, nil, pair)
+
+		@play_state.judge = MiniTest::Mock.new
+		@play_state.judge.expect(:game_over?, true, [])
+
+		@play_state.window = GameWindow.new
+
+		@play_state.update
+
+		assert @play_state.game_over_is_ready
+	end
+
+	def test_update_game_over_game_over_not_init_more_than_once
+		pair = [Gosu::KbSpace, Object]
+
+		@play_state.controller = MiniTest::Mock.new
+		@play_state.controller.expect(:buttons_pressed_down, nil, [])
+		@play_state.controller.expect(:add_button_down_callback, nil, pair)
+
+		@play_state.judge = MiniTest::Mock.new
+		@play_state.judge.expect(:game_over?, true, [])
+
+		@play_state.window = GameWindow.new
+
+		@play_state.update
+
+		@play_state.controller.verify
+	end
+
+	def test_update_game_over
+		pair = [Gosu::KbSpace, Object]
+
+		@play_state.controller = MiniTest::Mock.new
+		@play_state.controller.expect(:buttons_pressed_down, nil, [])
+		@play_state.controller.expect(:add_button_down_callback, nil, pair)
+
+		@play_state.judge = MiniTest::Mock.new
+		@play_state.judge.expect(:game_over?, true, [])
+
+		@play_state.window = GameWindow.new
+
+		@play_state.update
+
+		@play_state.controller.verify
+	end
+
+	def test_update_judge_called_not_game_over
+		@play_state.controller = MiniTest::Mock.new
+		@play_state.controller.expect(:buttons_pressed_down, nil, [])
+
+		@play_state.judge = MiniTest::Mock.new
+		@play_state.judge.expect(:game_over?, false, [])
+
+		@play_state.update
+
+		@play_state.judge.verify
+	end
+
+	def test_update_judge_called_game_over
+		pair = [Gosu::KbSpace, Object]
+
+		@play_state.controller = MiniTest::Mock.new
+		@play_state.controller.expect(:buttons_pressed_down, nil, [])
+		@play_state.controller.expect(:add_button_down_callback, nil, pair)
+
+		@play_state.judge = MiniTest::Mock.new
+		@play_state.judge.expect(:game_over?, true, [])
+
+		@play_state.window = GameWindow.new
+
+		@play_state.update
+
+		@play_state.judge.verify
 	end
 
 	def test_death_mark
@@ -427,6 +534,53 @@ class PlayStateTester < Test::Unit::TestCase
 		oracle = "The winner is Player1!"
 		resp = @play_state.send(:create_win_message, player)
 		assert_equal(oracle, resp.text)
+	end
+
+	def test_create_game_over_prompt
+		@play_state.window = GameWindow.new
+
+		resp = @play_state.send(:create_game_over_prompt)
+
+		oracle = "Press Space to return to menu."
+		assert_equal(oracle, resp.text)
+	end
+
+	def test_game_over_init
+		@play_state.controller = MiniTest::Mock.new
+		add_args = [Gosu::KbSpace, Object]
+		@play_state.controller.expect(:add_button_down_callback, nil, add_args)
+
+		@play_state.window = GameWindow.new
+
+		@play_state.send(:game_over_init)
+
+		@play_state.controller.verify
+		assert_not_nil(@play_state.game_over_prompt)
+	end
+
+	def test_game_over_prompt_is_drawn
+		@play_state.window = GameWindow.new
+
+		entity = MiniTest::Mock.new
+		entity.expect(:draw, nil, [])
+		@play_state.all_entities = [entity]
+
+		player = Player.new("Hugo")
+
+		@play_state.judge = MiniTest::Mock.new
+		@play_state.judge.expect(:game_over?, true, [])
+		@play_state.judge.expect(:winner, player, [])
+
+		@play_state.game_over_prompt = MiniTest::Mock.new
+		@play_state.game_over_prompt.expect(:draw, nil, [])
+
+		@play_state.win_msg = MiniTest::Mock.new
+		@play_state.win_msg.expect(:!, false, [])
+		@play_state.win_msg.expect(:draw, nil, [])
+
+		@play_state.draw
+		
+		@play_state.game_over_prompt.verify
 	end
 
 
