@@ -20,7 +20,7 @@ class Menu
 		@components = []
 	end
 
-	# Removes the given component to the Menu.
+	# Adds the given component to the Menu.
 	#
 	# * *Args*    :
 	#   - +object+ +component+ -> The component to add
