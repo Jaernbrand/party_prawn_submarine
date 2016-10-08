@@ -5,6 +5,8 @@ require_relative '../../gui/menu'
 require_relative '../../gui/button'
 require_relative '../../gui/text_pane'
 
+require_relative 'player_entry'
+
 # Menu that allows the user to create a new game.
 class NewGameMenu < Menu
 
@@ -12,13 +14,17 @@ class NewGameMenu < Menu
 	#
 	# * *Args*    :
 	#   - +MainMenu+ +main+ -> The MainMenu which the current object is a submenu of
-	def initialize(main)
+	#   - +Gosu::TextInput+ +text_input+ -> The TextInput object to use for text editing by the user
+	def initialize(main, text_input=Gosu::TextInput.new)
 		super(main.window)
 
 		@main = main
+		@text_input = text_input
 
-		add_component(create_back_button(100, 650)) # TODO Change coordinates
-		add_component(create_start_button(900, 650)) # TODO Change coordinates
+		@entries = []
+
+		add_component(create_back_button(100, 650)) 
+		add_component(create_start_button(900, 650))
 
 		create_player_options
 	end
@@ -27,16 +33,25 @@ class NewGameMenu < Menu
 private 
 
 	# Creates the user interface that allows the user to choose the pre-game 
-	# options.
+	# options. The interface components are added to the menu's component 
+	# array.
 	def create_player_options
 		names = std_player_names
+		colours = std_player_colours
+		controls = ControlMapper.new.controls()
+
 		for i in 0...Constants::MAX_PLAYERS
-			name_pane = TextPane.new(names[i], 
-									 Constants::TEXT_HEIGHT, 
-									 Constants::FONT_NAME)
-			name_pane.x = 100
-			name_pane.y = 100 * (i+1)
-			add_component(name_pane)
+			entry = PlayerEntry.new(@window,
+									@main,
+									@text_input,
+									names[i], 
+									colours[i],
+									controls[i])
+									 
+			entry.x = 100
+			entry.y = 100 * (i+1)
+			add_component(entry)
+			@entries << entry
 		end
 	end
 
@@ -53,6 +68,20 @@ private
 		end
 		names
 	end
+
+	# Returns an array of the standrad player colours.
+	#
+	# * *Returns* :
+	#   - The standard player colours
+	# * *Return* *Type* :
+	#   - Array<Gosu::Colour>
+	def std_player_colours
+		[Gosu::Color::RED,
+		Gosu::Color::YELLOW,
+		Gosu::Color::GREEN,
+		Gosu::Color::FUCHSIA]
+	end
+
 
 	# Creates an exit button that closes the game on release. The top left
 	# corner of the button is placed at the given coordinate.
@@ -90,10 +119,45 @@ private
 							@window.user_messages.message(:start), 
 							Constants::BT_TEXT_HEIGHT,
 							Constants::FONT_NAME)
-		button.add_callback(:release, lambda {@parent.current_menu = new_game})
+
+		button.add_callback(:release, lambda do
+			players = entries_to_players
+			factory = GameFactory.new(GameControllerFactory.new)
+			game_over = create_game_over_callable
+			@window.state = factory.create_game(@window, game_over, *players)
+		end)
+
 		button.x = x
 		button.y = y
 		button
+	end
+
+	# Returns the player entries as Player objects.
+	#
+	# * *Returns* :
+	#   - Player objects corresponding to the PlayerEntry objects
+	# * *Return* *Type* :
+	#   - Array<Player>
+	def entries_to_players
+		players = []
+		@entries.each do |entry|
+			if entry.enabled
+				players << entry.player
+			end
+		end
+		players
+	end
+
+	# Creates a callable to be called when the game is over.
+	#
+	# * *Returns* :
+	#   - callable to be called when the game is over
+	# * *Return* *Type* :
+	#   - callable
+	def create_game_over_callable
+		lambda do
+			@window.state = @main
+		end
 	end
 
 end
