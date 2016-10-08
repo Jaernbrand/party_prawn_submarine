@@ -61,12 +61,11 @@ class TextComponent
 		@bg_height = text_height + 2
 	end
 
-	# Update the state of the TextComponent.
+	# Does nothing. Should be overridden by any subclass that needs to update 
+	# its state.
 	def update
 		# Left empty intentionally.
 	end
-
-protected
 
 	# Draws the background of the TextComponent, i.e. a rectangle in the colour
 	# of #background_colour.
