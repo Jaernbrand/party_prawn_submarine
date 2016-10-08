@@ -24,7 +24,8 @@ class GameWindow < Gosu::Window
 	def initialize(width=1024, 
 				   height=768, 
 				   fullscreen=false, 
-				   user_messages = MessageDictionary.new(English.messages))
+				   user_messages = MessageDictionary.new(English.messages, 
+														 English.keynames))
 
 		super(width, height, fullscreen)
 		self.caption = 'Party Prawn Submarine'
