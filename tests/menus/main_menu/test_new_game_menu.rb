@@ -46,6 +46,17 @@ class NewGameMenuTester < Test::Unit::TestCase
 
 		@window.verify
 	end
+	
+	def test_create_start_button_call_callback_not_enough_players
+		entries = @menu.instance_variable_get(:@entries)
+		# Disable 3 out of 4 players
+		disable_player_entries(entries, 3)
+
+		new_game = @menu.send(:create_start_button, 0, 0)
+		callback = new_game.callbacks[:release]
+
+		callback.call
+	end
 
 	def test_std_player_names
 		oracle = ["Player1", "Player2", "Player3", "Player4"]
