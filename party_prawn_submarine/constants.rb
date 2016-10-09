@@ -27,4 +27,7 @@ module Constants
 	# The maximum number of players.
 	MAX_PLAYERS = 4
 
+	# The minimum number of players.
+	MIN_PLAYERS = 2
+
 end
