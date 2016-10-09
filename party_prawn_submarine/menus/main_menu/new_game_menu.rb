@@ -122,6 +122,8 @@ private
 							Constants::FONT_NAME)
 
 		button.add_callback(:release, lambda do
+			return if !ready_to_start?
+
 			players = entries_to_players
 			factory = GameFactory.new(GameControllerFactory.new)
 			game_over = create_game_over_callable
@@ -132,6 +134,21 @@ private
 		button.y = y
 		button
 	end
+
+	# Returns true if the game is ready to start.
+	#
+	# * *Returns* :
+	#   - true if the game is ready to start
+	# * *Return* *Type* :
+	#   - boolean
+	def ready_to_start?
+		enabled_players = @entries.select do |entry|
+			entry.enabled
+		end
+		enabled_players.size() >= Constants::MIN_PLAYERS
+	end
+
+
 
 	# Returns the player entries as Player objects.
 	#

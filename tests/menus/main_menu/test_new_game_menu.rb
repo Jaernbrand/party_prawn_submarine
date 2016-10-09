@@ -110,8 +110,32 @@ class NewGameMenuTester < Test::Unit::TestCase
 		end
 	end
 
+	def test_ready_to_start_default_players_enabled
+		assert @menu.send(:ready_to_start?)
+	end
+
+	def test_ready_to_start_two_players_enabled
+		entries = @menu.instance_variable_get(:@entries)
+		# Disable 2 out of 4 players
+		disable_player_entries(entries, 2)
+		assert @menu.send(:ready_to_start?)
+	end
+
+	def test_ready_to_start_one_player_enabled
+		entries = @menu.instance_variable_get(:@entries)
+		# Disable 3 out of 4 players
+		disable_player_entries(entries, 3)
+		assert !@menu.send(:ready_to_start?)
+	end
+
 
 private
+
+	def disable_player_entries(entries, num)
+		for k in 0...num
+			entries[k].enabled=false
+		end
+	end
 
 	def mock_user_messages(window)
 		msgs = MiniTest::Mock.new
