@@ -49,8 +49,13 @@ private
 		end
 	end
 
-	def emplace_action(key, index)
-		action = Label.new(key.to_s, 
+	# Creates and emplaces the GUI component that contains the player action.
+	#
+	# * *Args*    :
+	#   - +Symbol+ +action+ -> The player action
+	#   - +Fixnum+ +index+ -> Index of the action
+	def emplace_action(action, index)
+		action = Label.new(action.to_s, 
 						   Constants::TEXT_HEIGHT, 
 						   Constants::FONT_NAME)
 		action.x = 100
@@ -59,6 +64,11 @@ private
 		add_component(action)
 	end
 
+	# Creates and emplaces the GUI component that contains the keyname.
+	# * *Args*    :
+	#   - +Fixnum+ +value+ -> The keyboard button value
+	#   - +Fixnum+ +index+ -> Index of the action
+	#   - +MessageDictionary+ +messages+ -> Message dictionary to use for string conversion
 	def emplace_keyname(value, index, messages)
 		keyname = Label.new(messages.keyname(value),
 						   Constants::TEXT_HEIGHT, 
