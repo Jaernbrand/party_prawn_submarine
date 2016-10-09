@@ -1,6 +1,7 @@
 
 require_relative '../../constants'
 
+require_relative '../../gui/label'
 require_relative '../../gui/button'
 require_relative '../../gui/text_pane'
 require_relative '../../gui/checkbox'
@@ -22,6 +23,7 @@ class PlayerEntry
 	#   - +String+ +player_name+ -> The name of the player
 	#   - +Gosu::Color+ +colour+ -> The colour of the player
 	#   - <tt>Hash<Symbol, Numeric></tt> +controls+ -> The player controls
+	#   - +Menu+ +controls_parent+ -> The parent menu of the player controls menu
 	#   - +boolean+ +enabled+ -> Whether the PlayerEntry is enabled
 	def initialize(window, 
 				   main,
@@ -29,6 +31,7 @@ class PlayerEntry
 				   player_name, 
 				   colour, 
 				   controls, 
+				   controls_parent,
 				   enabled=true)
 
 		@x = @y = 0
@@ -39,7 +42,7 @@ class PlayerEntry
 		@enable = create_enable_player(enabled)
 		@name = create_player_name(player_name, text_input)
 		@colour = create_player_colour(colour)
-		@controls = create_player_controls(controls)
+		@controls = create_player_controls(controls, controls_parent)
 	end
 
 	# Returns whether the current PlayerEntry is enabled or not. An enabled 
@@ -159,11 +162,14 @@ private
 
 	# Create a GUI component with the controls of the Player.
 	#
+	# * *Args*    :
+	#   - <tt>Hash<Symbol, Numeric></tt> +controls+ -> The player controls
+	#   - +Menu+ +controls_parent+ -> The parent menu of the player controls menu
 	# * *Returns* :
 	#   - component with the controls of the Player
 	# * *Return* *Type* :
 	#   - PlayerControlsMenu
-	def create_player_controls(controls)
+	def create_player_controls(controls, controls_parent)
 		messages_dictionary = @window.user_messages
 		controls_button = Button.new(@window, 
 									   messages_dictionary.message(:controls), 
@@ -175,9 +181,11 @@ private
 		controls_button.singleton_class.class_eval do 
 			attr_accessor :controls_menu
 		end
-		controls_button.controls_menu = PlayerControlsMenu.new(controls)
+		controls_button.controls_menu = PlayerControlsMenu.new(@main, controls)
 		controls_button.add_callback(:release, 
 							create_controls_button_callback(controls_button))
+
+		controls_button.controls_menu.parent = controls_parent
 
 		controls_button
 	end

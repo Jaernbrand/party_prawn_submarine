@@ -46,7 +46,8 @@ private
 									@text_input,
 									names[i], 
 									colours[i],
-									controls[i])
+									controls[i],
+								   	self)
 									 
 			entry.x = 100
 			entry.y = 100 * (i+1)

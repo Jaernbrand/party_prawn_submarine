@@ -36,6 +36,7 @@ private
 	def mock_user_messages(window)
 		msgs = MiniTest::Mock.new
 		msgs.expect(:message, "Dummy Text", [Symbol])
+		msgs.expect(:keyname, "Dummy Text", [Symbol])
 		window.expect(:user_messages, msgs, [])
 	end
 

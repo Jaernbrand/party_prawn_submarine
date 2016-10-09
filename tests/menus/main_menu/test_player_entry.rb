@@ -19,17 +19,22 @@ class PlayerEntryTester < Test::Unit::TestCase
 	def setup
 		@fake_window = MiniTest::Mock.new
 		setup_fake_window_user_messages
+
 		@fake_main = MiniTest::Mock.new
+		@fake_main.expect(:window, @fake_window, [])
+
 		@fake_text_input = MiniTest::Mock.new
 		@player_name = "Player1"
 		@colour = Gosu::Color::RED
 		@controls = ControlMapper.new.controls()[0]
+		controls_parent = MiniTest::Mock.new
 		@entry = PlayerEntry.new(@fake_window, 
 								 @fake_main,
 								 @fake_text_input, 
 								 @player_name, 
 								 @colour, 
-								 @controls)
+								 @controls,
+								 controls_parent)
 	end
 
 	def test_default_x
@@ -89,17 +94,26 @@ class PlayerEntryTester < Test::Unit::TestCase
 	end
 
 	def test_create_player_controls
-		controls_button = @entry.send(:create_player_controls, @controls)
+		controls_parent = MiniTest::Mock.new
+		controls_button = @entry.send(:create_player_controls, 
+									  @controls, 
+									  controls_parent)
 		assert(controls_button.is_a? Button)
 	end
 
 	def test_create_player_controls_controls_menu_is_added
-		controls_button = @entry.send(:create_player_controls, @controls)
+		controls_parent = MiniTest::Mock.new
+		controls_button = @entry.send(:create_player_controls, 
+									  @controls, 
+									  controls_parent)
 		assert(controls_button.controls_menu.is_a? Menu)
 	end
 
 	def test_create_player_controls_callback_is_added
-		control_button = @entry.send(:create_player_controls, @controls)
+		controls_parent = MiniTest::Mock.new
+		control_button = @entry.send(:create_player_controls, 
+									 @controls, 
+									 controls_parent)
 		assert(control_button.is_a? Button)
 	end
 
