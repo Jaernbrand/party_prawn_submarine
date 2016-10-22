@@ -209,6 +209,15 @@ class ButtonTester < Test::Unit::TestCase
 		@button.label.verify
 	end
 
+	def test_draw_background
+		@button.label = MiniTest::Mock.new
+		@button.label.expect(:draw_background, nil, [])
+
+		@button.draw_background
+
+		@button.label.verify
+	end
+
 	def test_mouse_over_no_callable
 		assert_nothing_raised {
 			@button.send(:mouse_over)

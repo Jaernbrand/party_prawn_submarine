@@ -54,6 +54,11 @@ class Button
 		@label.draw
 	end
 
+	# Draws the background of the button in the current GameWindow.
+	def draw_background
+		@label.draw_background
+	end
+
 	# Updates the state of the Button and calls any of the given callbacks if
 	# needed.
 	def update
