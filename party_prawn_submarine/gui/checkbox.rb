@@ -25,14 +25,13 @@ class Checkbox
 		@window = window
 		@checked = checked
 
-		@label = Label.new(CHECK_MARK, size - Label::bg_margin, font_name, z)
-
-		@listen_key = Gosu::MsLeft
+		@button = Button.new(window, CHECK_MARK, size, font_name, z)
+		@button.add_callback(:release, Proc.new {@checked = !@checked})
 	end
 
 	# Gets the x value of the top left corner.
 	def x
-		@label.x
+		@button.x
 	end
 
 	# Sets the x value of the top left corner.
@@ -40,12 +39,12 @@ class Checkbox
 	# * *Args*    :
 	#   - +Numeric+ +x+ -> The new x value of the top left corner
 	def x=(value)
-		@label.x = value
+		@button.x = value
 	end
 
 	# Gets the y value of the top left corner.
 	def y
-		@label.y
+		@button.y
 	end
 
 	# Sets the y value of the top left corner.
@@ -53,25 +52,21 @@ class Checkbox
 	# * *Args*    :
 	#   - +Numeric+ +x+ -> The new y value of the top left corner
 	def y=(value)
-		@label.y = value
+		@button.y = value
 	end
 
 	# Draws the Checkbox in the current GameWindow.
 	def draw
 		if @checked
-			@label.draw
+			@button.draw
 		else
-			@label.draw_background
+			@button.draw_background
 		end
 	end
 
 	# Updates the state of the Checkbox.
 	def update
-		if contains(@window.mouse_x, @window.mouse_y) && 
-			Gosu::button_down?(@listen_key)
-
-			@checked = !@checked
-		end
+		@button.update
 	end
 
 	# Checks if the Checkbox contains the x and y coordinates.
@@ -84,7 +79,7 @@ class Checkbox
 	# * *Return* *Type* :
 	#   - boolean
 	def contains(x, y)
-		@label.contains(x, y)
+		@button.contains(x, y)
 	end
 
 end

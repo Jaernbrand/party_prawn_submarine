@@ -3,6 +3,6 @@ require 'gui/checkbox'
 
 class Checkbox
 
-	attr_accessor :label
+	attr_accessor :button
 
 end

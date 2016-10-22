@@ -29,7 +29,7 @@ class CheckboxTester < Test::Unit::TestCase
 	end
 
 	def test_label_is_set
-		assert_not_nil @checkbox.label
+		assert_not_nil @checkbox.button
 	end
 
 	def test_contains_coordinates_true
@@ -75,7 +75,9 @@ class CheckboxTester < Test::Unit::TestCase
 
 		mock_gosu
 		begin
-			Gosu.expect(:button_down?, true, [Numeric])
+			Gosu.expect(:button_down?, false, [Numeric])
+			@checkbox.button.pressed_previously = true
+
 			@checkbox.update
 
 			assert @checkbox.checked
@@ -90,7 +92,8 @@ class CheckboxTester < Test::Unit::TestCase
 
 		mock_gosu
 		begin
-			Gosu.expect(:button_down?, true, [Numeric])
+			Gosu.expect(:button_down?, false, [Numeric])
+			@checkbox.button.pressed_previously = true
 
 			@checkbox.checked = true
 			@checkbox.update
@@ -103,21 +106,21 @@ class CheckboxTester < Test::Unit::TestCase
 	
 	def test_draw_checked
 		@checkbox.checked = true
-		@checkbox.label = MiniTest::Mock.new
-		@checkbox.label.expect(:draw, nil, [])
+		@checkbox.button = MiniTest::Mock.new
+		@checkbox.button.expect(:draw, nil, [])
 
 		@checkbox.draw
 
-		@checkbox.label.verify
+		@checkbox.button.verify
 	end
 
 	def test_draw_not_checked
-		@checkbox.label = MiniTest::Mock.new
-		@checkbox.label.expect(:draw_background, nil, [])
+		@checkbox.button = MiniTest::Mock.new
+		@checkbox.button.expect(:draw_background, nil, [])
 
 		@checkbox.draw
 
-		@checkbox.label.verify
+		@checkbox.button.verify
 	end
 
 	def test_default_x
