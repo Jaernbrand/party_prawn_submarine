@@ -219,6 +219,7 @@ private
 							  enable)
 		enable_player.x = 100 + @x
 		enable_player.y = 100 + @y
+		enable_player.background_colour = Gosu::Color::GRAY
 		enable_player
 	end
 

@@ -71,6 +71,12 @@ class PlayerEntryTester < Test::Unit::TestCase
 		assert(enable_box.is_a? Checkbox)
 	end
 
+	def test_create_enable_player_bg_colour_correct
+		enable_box = @entry.send(:create_enable_player, true)
+		oracle = Gosu::Color::GRAY
+		assert_equal(oracle, enable_box.background_colour)
+	end
+
 	def test_create_enable_player_enable_true
 		enable_box = @entry.send(:create_enable_player, true)
 		assert enable_box.checked
