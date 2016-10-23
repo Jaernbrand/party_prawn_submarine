@@ -46,6 +46,12 @@ class ButtonTester < Test::Unit::TestCase
 		assert !@button.contains(x, y)
 	end
 
+	def test_access_background_colour
+		@button.background_colour = Gosu::Color::GRAY
+		oracle = Gosu::Color::GRAY
+		assert_equal(oracle, @button.background_colour)
+	end
+
 	def test_add_callback
 		action = :down
 		callable = Proc.new {}

@@ -49,6 +49,24 @@ class Button
 		@label.y = value
 	end
 
+	# Gets the backgroudn colour of the Button.
+	#
+	# * *Returns* :
+	#   - The colour of the Button
+	# * *Return* *Type* :
+	#   - Numeric
+	def background_colour
+		@label.background_colour
+	end
+
+	# Sets the background colour of the Button.
+	#
+	# * *Args*    :
+	#   - +Numeric+ +colour+ -> The numeric Gosu constant representing a colour
+	def background_colour=(colour)
+		@label.background_colour = colour
+	end
+
 	# Draws the button in the current GameWindow.
 	def draw
 		@label.draw
