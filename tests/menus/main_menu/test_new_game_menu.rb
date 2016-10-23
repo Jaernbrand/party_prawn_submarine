@@ -139,6 +139,23 @@ class NewGameMenuTester < Test::Unit::TestCase
 		assert !@menu.send(:ready_to_start?)
 	end
 
+	def test_ready_to_start_two_players_with_same_name
+		entries = @menu.instance_variable_get(:@entries)
+		entries[1] = entries[0].dup
+		assert !@menu.send(:ready_to_start?)
+	end
+
+	def test_names_are_unique
+		entries = @menu.instance_variable_get(:@entries)
+		assert @menu.send(:names_are_unique?, entries)
+	end
+
+	def test_names_are_unique_one_duplication
+		entries = @menu.instance_variable_get(:@entries)
+		entries[1] = entries[0].dup
+		assert !@menu.send(:names_are_unique?, entries)
+	end
+
 
 private
 

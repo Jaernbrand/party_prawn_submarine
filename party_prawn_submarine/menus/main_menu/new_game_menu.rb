@@ -145,10 +145,32 @@ private
 		enabled_players = @entries.select do |entry|
 			entry.enabled
 		end
-		enabled_players.size() >= Constants::MIN_PLAYERS
+		enabled_players.size() >= Constants::MIN_PLAYERS &&
+			names_are_unique?(enabled_players)
 	end
 
+	# Checks if the names of the entries are unique, i.e. if no one of the
+	# entries have the same name.
+	#
+	# * *Returns* :
+	#   - true if the names in the entries are unique
+	# * *Return* *Type* :
+	#   - boolean
+	def names_are_unique?(entries)
+		players = entries.map{|entry| entry.player()}
 
+		players.each do |lhs_player|
+			players.each do |rhs_player|
+
+				if lhs_player.name == rhs_player.name && 
+					!lhs_player.equal?(rhs_player) 
+
+					return false
+				end
+			end
+		end
+		true
+	end
 
 	# Returns the player entries as Player objects.
 	#
