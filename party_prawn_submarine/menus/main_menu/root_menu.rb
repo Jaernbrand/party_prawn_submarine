@@ -74,6 +74,15 @@ private
 		button
 	end
 
+	# Creates a label that shows the current version of the game.
+	#
+	# * *Args*    :
+	#   - +Numeric+ +x+ -> The x value of the label's top left corner
+	#   - +Numeric+ +y+ -> The y value of the label's top left corner
+	# * *Returns* :
+	#   - label showing the version of the game
+	# * *Return* *Type* :
+	#   - Label
 	def create_version_label(x, y)
 		msg = @window.user_messages.message(:version) +
 											" " +
