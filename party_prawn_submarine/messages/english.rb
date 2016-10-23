@@ -18,7 +18,8 @@ module English
 		:new_game => "New game",
 		:back => "Back",
 		:start => "Start",
-		:controls => "Controls"}
+		:controls => "Controls",
+		:version => "Version"}
 	end
 
 	# Returns a Hash with the gosu key constants as keys and the string 

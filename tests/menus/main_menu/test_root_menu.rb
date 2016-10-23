@@ -30,6 +30,22 @@ class RootMenuTester < Test::Unit::TestCase
 		assert(new_game.is_a? Button)
 	end
 
+	def test_create_version_label
+		version = @root.send(:create_version_label, 0, 0)
+		assert(version.is_a? Label)
+	end
+
+	def test_create_version_label_text_is_correct
+		msg_dic = MessageDictionary.new(English.messages, English.keynames)
+		@window.expect(:user_messages, msg_dic, [])
+
+		messages = MessageDictionary.new(English.messages, English.keynames)
+		oracle = messages.message(:version) + " " + Constants::VERSION.to_s
+		version = @root.send(:create_version_label, 0, 0)
+		assert_equal(oracle, version.text)
+	end
+
+
 
 private
 

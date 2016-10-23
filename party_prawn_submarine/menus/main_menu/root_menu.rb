@@ -24,6 +24,8 @@ class RootMenu < Menu
 		new_game.parent = self
 
 		add_component(create_new_game_button(new_game, 100, 100))
+		
+		add_component(create_version_label(50, 700))
 	end
 
 
@@ -70,6 +72,16 @@ private
 		button.x = x
 		button.y = y
 		button
+	end
+
+	def create_version_label(x, y)
+		msg = @window.user_messages.message(:version) +
+											" " +
+											Constants::VERSION.to_s
+		version = Label.new(msg, Constants::TEXT_HEIGHT, Constants::FONT_NAME)
+		version.x = x
+		version.y = y
+		version
 	end
 
 end
