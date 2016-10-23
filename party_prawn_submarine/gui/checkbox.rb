@@ -54,6 +54,24 @@ class Checkbox
 	def y=(value)
 		@button.y = value
 	end
+	
+	# Gets the backgroudn colour of the Checkbox.
+	#
+	# * *Returns* :
+	#   - The colour of the Checkbox
+	# * *Return* *Type* :
+	#   - Numeric
+	def background_colour
+		@button.background_colour
+	end
+
+	# Sets the background colour of the Checkbox.
+	#
+	# * *Args*    :
+	#   - +Numeric+ +colour+ -> The numeric Gosu constant representing a colour
+	def background_colour=(colour)
+		@button.background_colour = colour
+	end
 
 	# Draws the Checkbox in the current GameWindow.
 	def draw

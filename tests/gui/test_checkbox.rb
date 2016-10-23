@@ -38,6 +38,12 @@ class CheckboxTester < Test::Unit::TestCase
 		assert @checkbox.contains(x, y)
 	end
 
+	def test_access_background_colour
+		@checkbox.background_colour = Gosu::Color::RED
+		oracle = Gosu::Color::RED
+		assert_equal(oracle, @checkbox.background_colour)
+	end
+
 	def test_contains_coordinates_true_non_default_coordinate
 		@checkbox.x = 500
 		@checkbox.y = 500
