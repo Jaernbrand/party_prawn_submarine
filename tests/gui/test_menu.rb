@@ -44,7 +44,7 @@ class MenuTester < Test::Unit::TestCase
 		loops = 3
 		oracle = loops
 
-		for i in 0...loops
+		(0...loops).each do
 			@menu.add_component(MiniTest::Mock.new)
 		end
 
