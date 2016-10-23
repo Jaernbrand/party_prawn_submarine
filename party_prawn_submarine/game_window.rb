@@ -7,8 +7,8 @@ require_relative 'messages/english'
 # Window containing the game state. Also initialises Gosu.
 class GameWindow < Gosu::Window
 
-	# The maximum amount of time to skip redrawing In milliseconds.
-	MAX_SKIP_TIME = 2000
+	# The maximum amount of time to skip redrawing in milliseconds.
+	MAX_SKIP_TIME = 1000
 
 	# The current game state of the window
 	attr_accessor :state
