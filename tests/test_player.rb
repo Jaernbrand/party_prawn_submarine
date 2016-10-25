@@ -11,6 +11,16 @@ class PlayerTester < Test::Unit::TestCase
 		@player = Player.new(@name)
 	end
 
+	def test_z_value_is_initialised
+		assert_equal(0, @player.z)
+	end
+
+	def test_z_accessors
+		new_value = 5
+		@player.z = new_value
+		assert_equal(@player.z, new_value)
+	end
+
 	def test_equal_same_name
 		other = Player.new(@name)
 		assert(@player == other)

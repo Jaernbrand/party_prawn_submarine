@@ -18,6 +18,9 @@ class Player
 	# The controls used for player interaction
 	attr_accessor :controls
 
+	# The z value of the Player. Used when drawing the Player's entities.
+	attr_accessor :z
+
 	# Creates a new Player instance with the given name. May optionally be 
 	# initialised with a Hash containing player controls. See ControlMapper
 	# for additional information regarding the controls.
@@ -28,6 +31,8 @@ class Player
 	def initialize(name, controls={})
 		@name = name
 		@controls = controls
+
+		@z = 0
 	end
 
 	# Checks if the given object equals the current Player object. The other
