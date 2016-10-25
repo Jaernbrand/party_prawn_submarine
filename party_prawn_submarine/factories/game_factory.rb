@@ -48,6 +48,7 @@ class GameFactory
 		@pos_idx = 0
 
 		create_player_entities(play_state, players)
+		assign_z_values(players)
 
 		play_state.width = BOARD_WIDTH
 		play_state.height = BOARD_HEIGHT 
@@ -97,6 +98,7 @@ private
 	def create_player_entities(play_state, players)
 		players.each do |curr_player|
 			party_horn = PartyHorn.new
+			party_horn.player = curr_player
 
 			pos = next_starting_position
 			sub = Submarine.new(pos.x, 
@@ -110,6 +112,17 @@ private
 			curr_player.submarine = sub
 			curr_player.party_horn = party_horn
 		end
+	end
+
+	# Assign z values to the players.
+	#
+	# * *Args*    :
+	#   - +Array<Player>+ +players+ -> All the players in the game
+	def assign_z_values(players)
+		base = 100
+		players.each_index do |idx|
+			players[idx].z = base * idx
+		end	
 	end
 
 end
