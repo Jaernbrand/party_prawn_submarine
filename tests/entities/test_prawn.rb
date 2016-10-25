@@ -93,6 +93,7 @@ class PrawnTester < Test::Unit::TestCase
 
 		@prawn.player = MiniTest::Mock.new
 		@prawn.player.expect(:colour, 0xff_ff0000, [])
+		@prawn.player.expect(:z, 100, [])
 
 		Prawn::tiles = MiniTest::Mock.new
 		Prawn::skins = MiniTest::Mock.new

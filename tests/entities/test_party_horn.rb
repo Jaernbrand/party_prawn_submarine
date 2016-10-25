@@ -10,7 +10,10 @@ require_relative 'party_horn_extension'
 class PartyHornTester < Test::Unit::TestCase
 
 	def setup
+		@fake_player = MiniTest::Mock.new
 		@party_horn = PartyHorn.new
+		@party_horn.player = @fake_player
+
 		PartyHorn::tiles = nil
 		PartyHorn::sound = nil
 	end
@@ -22,13 +25,16 @@ class PartyHornTester < Test::Unit::TestCase
 	end
 
 	def test_draw_is_blown_faces_right
+		player_z = 100
+		@fake_player.expect(:z, player_z, [])
+
 		@party_horn.is_blown = true
 		PartyHorn::tiles = MiniTest::Mock.new
 		fake_img = MiniTest::Mock.new
 
 		args = [PartyHorn::PARTY_HORN_TILE_WIDTH/2.0, # x
 				PartyHorn::PARTY_HORN_TILE_HEIGHT/2.0, # y
-				PartyHorn::PARTY_HORN_Z,
+				PartyHorn::PARTY_HORN_Z + player_z,
 				0] # angle
 		fake_img.expect(:draw_rot, nil, args)
 
@@ -42,6 +48,9 @@ class PartyHornTester < Test::Unit::TestCase
 	end
 
 	def test_draw_is_blown_faces_left
+		player_z = 100
+		@fake_player.expect(:z, player_z, [])
+
 		@party_horn.is_blown = true
 		
 		angle = 180
@@ -52,7 +61,7 @@ class PartyHornTester < Test::Unit::TestCase
 
 		args = [PartyHorn::PARTY_HORN_TILE_WIDTH/2.0, # x
 				PartyHorn::PARTY_HORN_TILE_HEIGHT/2.0, # y
-				PartyHorn::PARTY_HORN_Z,
+				PartyHorn::PARTY_HORN_Z + player_z,
 				180 - angle] # Because of the face_left adjustment
 		fake_img.expect(:draw_rot, nil, args)
 
@@ -176,6 +185,12 @@ class PartyHornTester < Test::Unit::TestCase
 		@party_horn.angle = 10
 		face_left = false
 		assert_equal(oracle, @party_horn.send(:draw_angle, face_left))
+	end
+
+	def test_accessors_player
+		player = Player.new("PlayerName")
+		@party_horn.player = player
+		assert(player.equal? @party_horn.player)
 	end
 
 end

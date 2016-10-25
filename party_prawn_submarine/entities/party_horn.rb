@@ -23,6 +23,9 @@ class PartyHorn < BaseEntity
 	# The time the PartyHorn will be blown in milliseconds.
 	BLOW_DURATION = 1500
 
+	# The players that owns the PartyHorn
+	attr_accessor :player
+
 	# Initialises a new PartyHorn object. The new object is not being blown 
 	# and will therefore not be drawn. Positional attributes are set to 0.
 	def initialize
@@ -80,7 +83,7 @@ class PartyHorn < BaseEntity
 			img = @@tiles[idx]
 			img.draw_rot(@x + PARTY_HORN_TILE_WIDTH/2.0, 
 						 @y + PARTY_HORN_TILE_HEIGHT/2.0, 
-						 PARTY_HORN_Z, 
+						 PARTY_HORN_Z + @player.z, 
 						 angle)
 		end
 	end

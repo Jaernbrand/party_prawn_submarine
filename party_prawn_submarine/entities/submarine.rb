@@ -431,13 +431,13 @@ private
 		# NOTE! #draw_rot puts the centre of the image at the given coordinate!
 		sub_img.draw_rot(@x + SUB_TILE_WIDTH/2.0, 
 						 @y + SUB_TILE_HEIGHT/2.0, 
-						 SUB_Z, 
+						 SUB_Z + @player.z, 
 						 angle)
 
 		sub_img = @@skins[idx]
 		sub_img.draw_rot(@x + SUB_TILE_WIDTH/2.0, 
 						 @y + SUB_TILE_HEIGHT/2.0, 
-						 SUB_Z, 
+						 SUB_Z + @player.z, 
 						 angle, 
 						 0.5, # Default center_x 
 						 0.5, # Default center_y

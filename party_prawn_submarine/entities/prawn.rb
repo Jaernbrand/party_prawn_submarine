@@ -102,12 +102,15 @@ class Prawn < BaseEntity
 		@party_horn.draw
 		angle = draw_angle(face_left?)
 		prawn_img = @@tiles[@tile_idx]
-		prawn_img.draw_rot(@x+TILE_WIDTH/2, @y+TILE_HEIGHT/2, PRAWN_Z, angle)
+		prawn_img.draw_rot(@x+TILE_WIDTH/2, 
+						   @y+TILE_HEIGHT/2, 
+						   PRAWN_Z + @player.z, 
+						   angle)
 
 		prawn_skin = @@skins[@tile_idx] 
 		prawn_skin.draw_rot(@x + TILE_WIDTH/2, 
 						 @y + TILE_HEIGHT/2, 
-						 PRAWN_Z, 
+						 PRAWN_Z + @player.z, 
 						 angle, 
 						 0.5, # Default center_x 
 						 0.5, # Default center_y

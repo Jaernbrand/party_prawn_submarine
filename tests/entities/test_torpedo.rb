@@ -65,6 +65,8 @@ class TorpedoTester < Test::Unit::TestCase
 
 		@torpedo.player = MiniTest::Mock.new
 		@torpedo.player.expect(:colour, player_colour, [])
+		player_z = 100
+		@torpedo.player.expect(:z, player_z, [])
 		
 		x = 0 
 		y = 0
@@ -74,7 +76,7 @@ class TorpedoTester < Test::Unit::TestCase
 		scale = 1
 		args = [x + Torpedo::IMG_WIDTH/2.0, 
 				y + Torpedo::IMG_HEIGHT/2.0, 						
-				Torpedo::TORPEDO_Z,
+				Torpedo::TORPEDO_Z + player_z,
 				angle,
 				x_piv,
 				y_piv,

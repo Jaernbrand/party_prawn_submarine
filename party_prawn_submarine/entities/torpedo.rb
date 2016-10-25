@@ -7,6 +7,7 @@ require_relative 'explosion'
 # in a straight line.
 class Torpedo < BaseEntity
 
+	# The path to the image representation of the torpedo
 	TORPEDO_IMAGE_PATH = Constants::IMAGE_PATH + "torpedo.png"
 
 	# In pixels
@@ -17,6 +18,7 @@ class Torpedo < BaseEntity
 	# Pixels / update
 	STD_MOVE_SPEED = 2
 
+	# The z layer where torpedos are drawn
 	TORPEDO_Z = 1
 
 	# The Player who owns the Torpedo
@@ -101,7 +103,7 @@ class Torpedo < BaseEntity
 	def draw
 		@@img.draw_rot(@x + IMG_WIDTH/2.0, 
 					   @y + IMG_HEIGHT/2.0, 
-					  TORPEDO_Z, 
+					   TORPEDO_Z + @player.z, 
 					  @angle, 
 					  0.5, # Default center_x
 					  0.5, # Default center_y

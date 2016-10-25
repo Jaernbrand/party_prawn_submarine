@@ -469,6 +469,8 @@ class SubmarineTester < Test::Unit::TestCase
 
 		@sub.player = MiniTest::Mock.new
 		@sub.player.expect(:colour, player_colour, [])
+		player_z = 100
+		@sub.player.expect(:z, player_z, [])
 
 		fake_tile = MiniTest::Mock.new
 		fake_skin = MiniTest::Mock.new
@@ -480,14 +482,16 @@ class SubmarineTester < Test::Unit::TestCase
 		scale = 1
 		skin_args = [x, 
 		  		y, 						
-				Submarine::SUB_Z,
+				Submarine::SUB_Z + player_z,
 				angle,
 				centre,
 				centre,
 				scale,
 				scale,
 				player_colour]
-		fake_tile.expect(:draw_rot, nil, [x, y, Submarine::SUB_Z, angle])
+		fake_tile.expect(:draw_rot, 
+						 nil, 
+						 [x, y, Submarine::SUB_Z + player_z, angle])
 		fake_skin.expect(:draw_rot, nil, skin_args)
 
 		idx = 1
@@ -570,6 +574,8 @@ class SubmarineTester < Test::Unit::TestCase
 
 		@sub.player = MiniTest::Mock.new
 		@sub.player.expect(:colour, player_colour, [])
+		player_z = 100
+		@sub.player.expect(:z, player_z, [])
 
 		fake_tile = MiniTest::Mock.new
 		fake_skin = MiniTest::Mock.new
@@ -581,14 +587,16 @@ class SubmarineTester < Test::Unit::TestCase
 		scale = 1
 		skin_args = [x, 
 		  		y, 						
-				Submarine::SUB_Z,
+				Submarine::SUB_Z + player_z,
 				angle,
 				centre,
 				centre,
 				scale,
 				scale,
 				player_colour]
-		fake_tile.expect(:draw_rot, nil, [x, y, Submarine::SUB_Z, angle])
+		fake_tile.expect(:draw_rot, 
+						 nil, 
+						 [x, y, Submarine::SUB_Z + player_z, angle])
 		fake_skin.expect(:draw_rot, nil, skin_args)
 
 		idx = 1
