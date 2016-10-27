@@ -43,6 +43,9 @@ class Prawn < BaseEntity
 
 		@x = @y = @angle = 0
 
+		@width = TILE_WIDTH
+		@height = TILE_HEIGHT
+
 		@swimming = false
 
 		@tile_idx = 0

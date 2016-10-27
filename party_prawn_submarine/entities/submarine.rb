@@ -10,6 +10,7 @@ class Submarine < BaseEntity
 	SUB_IMAGE_PATH = Constants::IMAGE_PATH + "submarine.png"
 	SUB_SKIN_PATH = Constants::IMAGE_PATH + "submarine_skin.png"
 
+	# Path to the sound that will play when a torpedo is fired by the submarine.
 	FIRE_TORPEDO_SOUND_PATH = Constants::SOUND_EFFECTS_PATH + "fire-torpedo.ogg"
 
 	# In pixels.
@@ -311,7 +312,7 @@ protected
 	#   - +Numeric+ +y_speed+ -> The amount to add to the y value
 	def update_y(y_speed)
 		@y += y_speed
-		@prawn.y += y_speed
+		@prawn.y += y_speed 
 	end
 
 	# Sets the angle of the Submarine and its children to the given angle.

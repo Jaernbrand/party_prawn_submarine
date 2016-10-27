@@ -22,6 +22,14 @@ class PrawnTester < Test::Unit::TestCase
 		assert_not_nil(Prawn::swim_sound)
 	end
 
+	def test_width_is_set
+		assert_not_nil @prawn.width
+	end
+
+	def test_height_is_set
+		assert_not_nil @prawn.height
+	end
+
 	def test_update_party_horn_is_updated
 		@prawn.party_horn = MiniTest::Mock.new
 
