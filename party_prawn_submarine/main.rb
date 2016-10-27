@@ -9,6 +9,7 @@ require_relative 'factories/game_factory'
 require_relative 'factories/game_controller_factory'
 
 require_relative 'game_states/play_state'
+require_relative 'game_states/main_menu'
 
 require_relative 'entities/submarine' 
 require_relative 'entities/prawn'
@@ -16,14 +17,6 @@ require_relative 'entities/torpedo'
 require_relative 'entities/party_horn'
 require_relative 'entities/explosion'
 
-control_mapper = ControlMapper.new
-ctrls = control_mapper.controls
-player1 = Player.new('Player1', ctrls[0])
-player1.colour = 0xff_ff0000
-player2 = Player.new('Player2', ctrls[1])
-player2.colour = 0xff_00ff00
-
-# TODO Actual main starts here.
 
 # Only gets executed if the current file is called as main.
 if __FILE__ == $0
@@ -34,8 +27,7 @@ if __FILE__ == $0
 	end
 
 	factory = GameFactory.new(GameControllerFactory.new)
-	play_state = factory.create_game(window, player1, player2)
 
-	window.state = play_state
+	window.state = MainMenu.new(window)
 	window.show
 end
