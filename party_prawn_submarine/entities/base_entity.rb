@@ -239,7 +239,7 @@ private
 		all_corners
 	end
 
-	# Creates a corner coorinate from an non-rotated rectangle. The corner is
+	# Creates a corner coordinate from a non-rotated rectangle. The corner is
 	# rotated around the given centre coordinate.
 	#
 	# * *Args*    :
