@@ -16,7 +16,7 @@ named *Party Prawn Submarine*.
 
 # Play
 Run the game by executing *party_prawn_submarine.rb* in the 
-*Party Prawn Submarine* directory created when the project was built.
+*Party Prawn Submarine* directory that was created when the project was built.
 
 # Documentation
 Generate the documentation by running the following command:
