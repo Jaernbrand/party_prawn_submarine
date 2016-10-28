@@ -1,10 +1,31 @@
 # Party Prawn Submarine
 Game where submarine driving prawns fight each other.
 
-# Game is not yet playable
+# Dependencies
+* [Gosu](https://github.com/gosu/gosu)
+
+Tested with Ruby 1.9.3.
+
+# Build
+Run the following command in a shell to build the game:
+```
+rake build
+```
+This will create a new directory named *build* containing an other directory
+named *Party Prawn Submarine*.
+
+# Play
+Run the game by executing *party_prawn_submarine.rb* in the 
+*Party Prawn Submarine* directory created when the project was built.
+
+# Documentation
+Generate the documentation by running the following command:
+```
+rake rdoc
+```
+The documentation will be placed in the *doc* directory.
 
 # Sound
-## Music
 ## Sound Effects
 * <b>party-horn :</b>
 _[Party horn.wav](https://www.freesound.org/people/audiosmedia/sounds/170583/)_ 
