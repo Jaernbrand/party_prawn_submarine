@@ -5,7 +5,7 @@ require 'gosu'
 module Constants
 
 	MAJOR_VERSION = "0"
-	MINOR_VERSION = "0"
+	MINOR_VERSION = "1"
 	PATCH = "0"
 
 	VERSION = [MAJOR_VERSION, MINOR_VERSION, PATCH].join(".")
